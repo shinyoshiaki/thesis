@@ -1,4 +1,5 @@
 \documentclass[sotsuron]{jcsie}
+\usepackage{float}
 \title{ライブストリーミングに対応した分散ハッシュテーブルの検討}
 \etitle{Title}
 \author{沈 嘉秋}
@@ -110,30 +111,51 @@ Kademliaとは分散ハッシュテーブルの一種である。
 高いChurn耐性を持つため、実用的なP2Pアプリケーションにて多く利用されている。
 Kademliaはノード数Nのシステムにおいてデータを探索する際に
 $O(\log(n))$ 回ノードへの通信を行う。
+
 \subsection{採用例}
-\begin{table}[htb]
+\begin{table}[H]
 \begin{tabular}{|l|l|}
 \hline
 サービス名 & 使用箇所\\ 
 \hline
 Torrent  &
-  magnetURLという機能を用いてファイルをダウンロードする際に
-  目的のファイルを持っているノードを探索するのにKademliaを用いている。
-  Torrentはアクティブユーザと転送量という点で見ると
-  世界で最も成功したP2Pのシステムであり、
-  そのシステムにKademliaはおおいに貢献していると言える。\\ 
-\hline
-  ethereum & 
-  Node Discovery Protocol v4 というノードの探索プロトコルに用いられている.\\ 
-\hline
-  IPFS     &
-  IPFSとは複数のノードが協調して一つの大きなストレージ
-  またはHTTPの置き換えとして機能することを目的としているシステムある。
-  IPFSはKademliaをベースとして開発されており、
-  基本的にはKademliaの機能拡張のようにも見えます。\\ 
-\hline
+\begin{tabular}{l}
+magnetURLという機能を用いてファイルをダウンロードする際に\\
+目的のファイルを持っているノードを探索するのにKademliaを用いている。\\
+Torrentはアクティブユーザと転送量という点で見ると\\
+世界で最も成功したP2Pのシステムであり、\\
+そのシステムにKademliaはおおいに貢献していると言える。\\
+\end{tabular}\\ \hline
+Ethereum &
+\begin{tabular}{l}
+Node Discovery Protocol v4 というノードの探索プロトコルに用いられている.
+\end{tabular}\\ \hline
+IPFS     &
+\begin{tabular}{l}
+IPFSとは複数のノードが協調して一つの大きなストレージ\\
+またはHTTPの置き換えとして機能することを目的としているシステムある。\\
+IPFSはKademliaをベースとして開発されている\\
+\end{tabular}\\ \hline
 \end{tabular}
 \end{table}
+
+\subsection{アルゴリズム}
+\subsubsection{ノードIDとキー}
+Kademliaにおける個々のノードには固有のノードIDが割り振られる。
+このノードIDは160bitと定義されている。ノードIDの決定方法は、
+ランダムな値にsha1というハッシュ関数を適用し、
+160bitの値を取り出すのが一般的である。
+また、ハッシュテーブルに保存するバリューと対になるキーも
+160bitと定義されている。
+\subsubsection{経路表}
+分散ハッシュテーブルのアルゴリズムによって
+ノードを管理する経路表の形は様々である。
+例えば、Chordという分散ハッシュテーブルの場合は環状の経路表を持っている。
+Kademliaの場合はk-bucketsという160個のk-bucektからなる経路表を持っている。
+一つのk-bucketにはK個(たいていの実装例では20個)のノードが登録でき、
+自身のノードとの距離に応じたk-bucketにそれぞれのノードが登録されていく。
+ノード間の距離は2進数のノードID同士をXORで掛け合わした結果を
+10進数に戻した値を用いる。
 
 \chapter{本論}
 \chapter{おわりに}
