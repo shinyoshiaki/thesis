@@ -1,4 +1,4 @@
-This is e-pTeX, Version 3.14159265-p3.8.2-190131-2.6 (utf8.euc) (TeX Live 2019) (preloaded format=platex 2019.10.12)  3 JAN 2020 02:00
+This is e-pTeX, Version 3.14159265-p3.8.2-190131-2.6 (utf8.euc) (TeX Live 2019) (preloaded format=platex 2019.10.12)  6 JAN 2020 15:19
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -137,16 +137,7 @@ LaTeX Font Info:    Font shape `JT1/gt/m/n' will be
 (Font)              scaled to size 23.90964pt on input line 50.
 LaTeX Font Info:    Font shape `JY1/gt/m/n' will be
 (Font)              scaled to size 23.90964pt on input line 50.
- (./sample.toc
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 2.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 2.
-LaTeX Font Info:    Font shape `JY1/mc/m/n' will be
-(Font)              scaled to size 6.72699pt on input line 2.
-LaTeX Font Info:    Font shape `JY1/mc/m/n' will be
-(Font)              scaled to size 4.805pt on input line 2.
-)
+ (./sample.toc)
 \tf@toc=\write3
 \openout3 = `sample.toc'.
 
@@ -162,13 +153,48 @@ LaTeX Font Info:    Font shape `JT1/gt/m/n' will be
 (Font)              scaled to size 19.9311pt on input line 52.
 LaTeX Font Info:    Font shape `JY1/gt/m/n' will be
 (Font)              scaled to size 19.9311pt on input line 52.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 57.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 57.
+LaTeX Font Info:    Font shape `JY1/mc/m/n' will be
+(Font)              scaled to size 6.72699pt on input line 57.
+LaTeX Font Info:    Font shape `JY1/mc/m/n' will be
+(Font)              scaled to size 4.805pt on input line 57.
+LaTeX Font Info:    Font shape `JT1/mc/m/n' will be
+(Font)              scaled to size 6.72699pt on input line 57.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 57.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 57.
+LaTeX Font Info:    Font shape `JY1/mc/m/n' will be
+(Font)              scaled to size 5.76599pt on input line 57.
+LaTeX Font Info:    Font shape `JT1/mc/m/n' will be
+(Font)              scaled to size 5.76599pt on input line 57.
 [1
 
-]
+] [2]
 第2章
-[2
+LaTeX Font Info:    Font shape `JT1/gt/m/n' will be
+(Font)              scaled to size 11.53198pt on input line 113.
+LaTeX Font Info:    Font shape `JY1/gt/m/n' will be
+(Font)              scaled to size 11.53198pt on input line 113.
 
-] (./sample.bbl [3
+Overfull \hbox (939.49724pt too wide) in paragraph at lines 115--136
+[][][][] 
+ []
+
+[3
+
+]
+第3章
+[4
+
+]
+第4章
+[5
+
+] (./sample.bbl [6
 
 ]
 LaTeX Font Info:    Font shape `JT1/gt/m/it' in size <10> not available
@@ -197,16 +223,20 @@ Underfull \hbox (badness 10000) in paragraph at lines 21--27
 tuning/index.html
  []
 
-) [4
+) [7
 
-] (./sample.aux) ) 
+] (./sample.aux)
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+ ) 
 Here is how much of TeX's memory you used:
- 978 strings out of 494239
- 11639 string characters out of 6176105
+ 993 strings out of 494239
+ 11799 string characters out of 6176105
  77169 words of memory out of 5000000
- 5335 multiletter control sequences out of 15000+600000
- 14456 words of font info for 67 fonts, out of 8000000 for 9000
+ 5345 multiletter control sequences out of 15000+600000
+ 17038 words of font info for 78 fonts, out of 8000000 for 9000
  19 hyphenation exceptions out of 8191
- 36i,4n,27p,244b,168s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 36i,8n,27p,244b,238s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on sample.dvi (9 pages, 8092 bytes).
+Output written on sample.dvi (12 pages, 14844 bytes).
