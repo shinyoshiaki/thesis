@@ -12,41 +12,41 @@
 \emaketitle
 \pagenumbering{roman}
 \begin{abstract}    
-  分散ハッシュテーブルはファイル共有サービス等に応用され、
-  すでに普及している一方で、
-  近年はブロックチェーンの関連技術としても注目を集めている。
-  分散ハッシュテーブルの中でもKademliaはその実装の容易さと
-  ノードの出入りに対する耐性の強さから
-  実用的なサービスへの応用が可能であり、
-  多くのサービスで採用されている。
-  近年、ライブストリーミングサービスの需要が高まっている
-  一方で配信プラットフォームの事業者への依存が強く
-  サービス利用者の立場は弱いものとなっている。
-  そこで本論文では
-  分散的なライブストリーミングサービスの基盤となる
-  システムをKademliaを元に実装し、その評価を行った。
-  Kademlia上で単純にライブストリーミングの実装を行う場合、
-  非効率的な通信が発生するが、本論文の手法では、
-  Kademliaネットワークを更に構造化することで
-  非効率的な通信を削減することが可能となった。
-  結果、分散的なライブストリーミングサービスの実装への
-  足がかりを作ることが出来た。
+	分散ハッシュテーブルはファイル共有サービス等に応用され、
+	すでに普及している一方で、
+	近年はブロックチェーンの関連技術としても注目を集めている。
+	分散ハッシュテーブルの中でもKademliaはその実装の容易さと
+	ノードの出入りに対する耐性の強さから
+	実用的なサービスへの応用が可能であり、
+	多くのサービスで採用されている。
+	近年、ライブストリーミングサービスの需要が高まっている
+	一方で配信プラットフォームの事業者への依存が強く
+	サービス利用者の立場は弱いものとなっている。
+	そこで本論文では
+	分散的なライブストリーミングサービスの基盤となる
+	システムをKademliaを元に実装し、その評価を行った。
+	Kademlia上で単純にライブストリーミングの実装を行う場合、
+	非効率的な通信が発生するが、本論文の手法では、
+	Kademliaネットワークを更に構造化することで
+	非効率的な通信を削減することが可能となった。
+	結果、分散的なライブストリーミングサービスの実装への
+	足がかりを作ることが出来た。
 \end{abstract}
 \begin{eabstract}
-  Here is abstract
-  Here is abstract
-  Here is abstract
-  Here is abstract
-  Here is abstract
-  Here is abstract
-  Here is abstract
-  Here is abstract
-  Here is abstract
-  Here is abstract
-  Here is abstract
-  Here is abstract
-  Here is abstract
-  Here is abstract
+	Here is abstract
+	Here is abstract
+	Here is abstract
+	Here is abstract
+	Here is abstract
+	Here is abstract
+	Here is abstract
+	Here is abstract
+	Here is abstract
+	Here is abstract
+	Here is abstract
+	Here is abstract
+	Here is abstract
+	Here is abstract
 \end{eabstract}
 \tableofcontents
 \pagenumbering{arabic}
@@ -114,29 +114,29 @@ $O(\log(n))$ 回ノードへの通信を行う。
 
 \subsection{採用例}
 \begin{table}[H]
-\begin{tabular}{|l|l|}
-\hline
-サービス名 & 使用箇所\\ 
-\hline
-Torrent  &
-\begin{tabular}{l}
-magnetURLという機能を用いてファイルをダウンロードする際に\\
-目的のファイルを持っているノードを探索するのにKademliaを用いている。\\
-Torrentはアクティブユーザと転送量という点で見ると\\
-世界で最も成功したP2Pのシステムであり、\\
-そのシステムにKademliaはおおいに貢献していると言える。\\
-\end{tabular}\\ \hline
-Ethereum &
-\begin{tabular}{l}
-Node Discovery Protocol v4 というノードの探索プロトコルに用いられている.
-\end{tabular}\\ \hline
-IPFS     &
-\begin{tabular}{l}
-IPFSとは複数のノードが協調して一つの大きなストレージ\\
-またはHTTPの置き換えとして機能することを目的としているシステムある。\\
-IPFSはKademliaをベースとして開発されている\\
-\end{tabular}\\ \hline
-\end{tabular}
+	\begin{tabular}{|l|l|}
+		\hline
+		サービス名 & 使用箇所 \\ 
+		\hline
+		Torrent         &              
+		\begin{tabular}{l}
+		magnetURLという機能を用いてファイルをダウンロードする際に\\
+		目的のファイルを持っているノードを探索するのにKademliaを用いている。\\
+		Torrentはアクティブユーザと転送量という点で見ると\\
+		世界で最も成功したP2Pのシステムであり、\\
+		そのシステムにKademliaはおおいに貢献していると言える。\\
+	\end{tabular}\\ \hline
+	Ethereum &
+	\begin{tabular}{l}
+		Node Discovery Protocol v4 というノードの探索プロトコルに用いられている. 
+	\end{tabular}\\ \hline
+	IPFS     &
+	\begin{tabular}{l}
+		IPFSとは複数のノードが協調して一つの大きなストレージ                         \\
+		またはHTTPの置き換えとして機能することを目的としているシステムある。 \\
+		IPFSはKademliaをベースとして開発されている                                            \\
+	\end{tabular}\\ \hline
+	\end{tabular}
 \end{table}
 
 \subsection{アルゴリズム}
@@ -156,12 +156,81 @@ Kademliaの場合はk-bucketsという160個のk-bucektからなる経路表を�
 自身のノードとの距離に応じたk-bucketにそれぞれのノードが登録されていく。
 ノード間の距離は2進数のノードID同士をXORで掛け合わした結果を
 10進数に戻した値を用いる。
+\subsubsection{プロトコル}
+Kademliaには４種類の通信問い合わせがある。名称と内容についてまとめる。
+\begin{table}[H]
+	\begin{tabular}{|l|l|}
+		\hline
+    名称 & 
+    内容 \\ 
+    \hline
+		PING &              
+		\begin{tabular}{l}
+		対象のノードがオンラインかどうかを問い合わせる。
+	  \end{tabular}\\ 
+    \hline
+    STORE &
+	  \begin{tabular}{l}
+    対象ノードにkey,valueの組を保持させる。\\
+    保持させる際のルールは、\\
+    自身のk-bucketsから最もkeyにxorの距離が近いノードを選択し、\\
+    そのノードにkey,valueを与える。\\
+    受け取ったノードは更に自身のk-bucketsから受け取ったkeyに\\
+    最も近いノードを選択し、\\
+    key,valueを与える。この動作を何度も繰り返す。\\
+    最終的にはネットワーク上で最もkeyに距離が近いノードが\\
+    目的のkey,valueを持つ。
+	  \end{tabular}\\
+    \hline
+    FIND\_NODE &
+	  \begin{tabular}{l}
+    自身のk-bucketsのうち最もkeyにxor距離の近いノードに\\
+    自身のノードIDと距離が近い上位K個のノードの情報を送らせる。
+	  \end{tabular}\\
+    \hline
+    FIND\_VALUE &
+	  \begin{tabular}{l}
+    自身のk-bucketsのうち最もkeyにxor距離の近いノードに\\
+    keyと対応するvalueを持っているか問い合わせる。\\
+    持っている場合はそのvalueを、\\
+    持っていない場合は問い合わせられたノード自身のk-bucketsのうち、\\
+    keyに最も近いノードの情報を返す。
+	  \end{tabular}\\
+    \hline
+	\end{tabular}
+\end{table}
+\subsubsection{ノードの管理}
+KademliaのChurn耐性の高さはこのノードの管理方法にある。
+Kademliaのノード管理は上記の4つのプロトコルの通信を行うついでに行われる。
+そのため、ノードの離脱の際の処理が必要なく、
+Churnを考慮することなくネットワークを維持することができる。
+\subsubsection{経路表の更新}
+ノードは4つのプロトコルのいずれかのメッセージを受け取った際に
+送信元が該当するk-bucketの中にあった場合そのノードをk-bucketの末尾に移す。
+送信元が該当するk-bucketの中に存在しないせず、k-bucketがすでに満杯な場合、
+そのk-bucket中の先頭のノードがオンラインかどうかをPINGで確認する。
+オンラインなら先頭のノードを残し、
+そうでなければ送信元の新しいノードをk-bucketに追加する。
+こうすることで長時間オンラインになっているノードが優先的にk-bucketに残るため、
+ネットワークの安定性が増す。
+\subsubsection{ノードの新規参加}
+新規参加するノードは、
+まず接続先のノードに対して自身のノードIDをkeyとしてFIND\_NODEを行う。
+問い合わせを受けたノードは送信元のkeyに近い最大K個のノードの情報を
+送信元にSTOREする。
+そうすることで、新規参加するノードはまず最大K個のノードに接続される。
+このあと、さらに自身のk-bucketsのうち最も自身のノードIDに
+xor距離が近いノードに対し自身のノードIDをkeyとしたFIND\_NODEを
+繰り返すことで接続先のノードを増やすことができる。
+\subsubsection{ノードの離脱}
+何もしない
+\section{WebRTC}
 
 \chapter{本論}
 \chapter{おわりに}
 \begin{acknowledgment}
-本研究を進めるにあたり, ご指導を頂いた指導教員の萩原助教授に感謝致します.
-日頃の議論において助言や知識を頂いた萩原研究室の皆様に感謝します.
+	本研究を進めるにあたり, ご指導を頂いた指導教員の萩原助教授に感謝致します.
+	日頃の議論において助言や知識を頂いた萩原研究室の皆様に感謝します.
 \end{acknowledgment}
 \nocite{*}
 \bibliographystyle{plain}
