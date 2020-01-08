@@ -310,13 +310,21 @@ PeerAはPeerOのanswer側のSDPをsetRemoteDescriptionで受け取りP2P接続�
 
 \chapter{本論}
 \section{手法}
+本論文では、Kademliaをベースに効率的にストリーム形式のデータを共有できる
+システムを提案する。
+本手法では、共有するデータの情報をメタファイルに保存し、
+Kademliaネットワーク上で共有する。
+Kademliaネットワーク上でそのメタファイルを所有するユーザ同士で
+さらに別のKademliaネットワークを構築し、メタファイルの情報に従い
+データの共有を行う。
 
+TODO 図
 
 
 \chapter{おわりに}
 \begin{acknowledgment}
-	本研究を進めるにあたり, ご指導を頂いた指導教員の萩原助教授に感謝致します.
-	日頃の議論において助言や知識を頂いた萩原研究室の皆様に感謝します.
+本研究を進めるにあたり, ご指導を頂いた指導教員の萩原助教授に感謝致します.
+日頃の議論において助言や知識を頂いた萩原研究室の皆様に感謝します.
 \end{acknowledgment}
 \nocite{*}
 \bibliographystyle{plain}
