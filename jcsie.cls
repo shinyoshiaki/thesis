@@ -3,7 +3,6 @@
 \LoadClass[a4j, 11pt]{jsreport}
 
 \RequirePackage{url}
-\RequirePackage{graphicx}
 
 \newif\if@sotsuron
 \@sotsuronfalse

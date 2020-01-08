@@ -1,5 +1,7 @@
 \documentclass[sotsuron]{jcsie}
+\usepackage[dvipdfmx]{graphicx}
 \usepackage{float}
+
 \title{ライブストリーミングに対応した分散ハッシュテーブルの検討}
 \etitle{Title}
 \author{沈 嘉秋}
@@ -7,6 +9,7 @@
 \id{T18I917F}
 \keywords{P2P, 分散ハッシュテーブル}
 \ekeywords{hoge, hoge}
+
 \begin{document}
 \maketitle
 \emaketitle
@@ -224,9 +227,92 @@ xor距離が近いノードに対し自身のノードIDをkeyとしたFIND\_NOD
 繰り返すことで接続先のノードを増やすことができる。
 \subsubsection{ノードの離脱}
 何もしない
+
 \section{WebRTC}
+WebRTC (Web Real-Time Communication)[2]とはWorld Wide Web Consortium
+(W3C)が提唱するリアルタイムコミュニケーション用のAPIの定義で，プラグイ
+ン無しでウェブブラウザ間のボイスチャット，ビデオチャット，ファイル共有
+ができる．ブラウザでリアルタイムなコミュニケーションを可能にする
+WebRTCはGoogleによってオープンソース化されており，現在は，W3Cによっ
+てブラウザ対応APIの標準化が進められているWebRTCはブラウザ向けのAPIと
+して誕生したが，現在では，AndroidやiOSといったネイティブ環境で実装する
+ためのライブラリが公開されている．WebRTCにはNAT越えを実現するために
+Interactive Connectivity Establishment (ICE)という仕組みを採用している。
+\subsection{NAT越え}
+NAT（Network Address Translation）とは，
+インターネットプロトコルによって構築されたコンピュータネットワークにおいて，
+パケットヘッダに含まれるIPアドレスを，別のIPアドレスに変換する技術である．
+プライベートネットワーク環境下でプライベートIPアドレスを持つホストから，
+グローバルIPアドレスを持つゲートウェイを通して，
+インターネットにアクセスする際に，プライベートIPアドレスを
+グローバルIPアドレスに変換するために利用されることが多い．
+モバイルネットワークにおいてはキャリアグレードNATが用いられている．
+そのため，スマートフォン間でP2P通信を行うためには，
+NAT越えを行う必要がある．
+本研究ではWebRTCを用いてNAT越えを行う．
+WebRTCではICEの情報をやり取りすることで，NAT越えを行っている．
+ICEとは通信可能性のある通信経路に関する情報を示し，
+文字列で表現される．次のような複数の経路を候補とする．
+・P2Pによる直接通信
+・STUNによる，NAT通過のためのポートマッピング
+・TURNによる，リレーサーバーを介した中継通信
+STUN (Session Traversal Utilities for NATs)とは，
+音声，映像，文章などの双方向リアルタイムIP通信を行うアプリケーションにおいて，
+NAT越えの方法の1つとして使われる標準化されたインターネットプロトコルである．
+STUNプロトコルは，アプリケーションがNATの存在と種類を発見し，
+リモートホストへのUDP (User Datagram Protocol) 接続に
+NATが割り当てたグローバルIPアドレスとポート番号とを得ることを許す．
+STUNプロトコルが動作するには，インターネット上にSTUNサーバが存在する必要がある．
+STUNプロトコルは，RFC(Request for Comments) 5389に定められる．
+TURN (Traversal Using Relay around NAT) とは，
+マルチメディアアプリケーションがNATやファイアウォールを
+超えて通信することを補助するためのインターネットプロトコルである．
+TURNが一番役立つのは，TCP， UDPを使って
+対象型NAT装置により隠蔽（マスカレード）されたプライベートネットワークに
+接続されたクライアントを利用する場合である．
+TURNはRFC 5766で標準化されており，IPv6用の
+アップデートはRFC 6156である．TURNが使うURIスキームはRFC 7065に記述
+されている．
+本研究ではGoogleが無料公開しているSTUNを用いている．TURNは自ら
+TURN用のサーバを構築する必要があるうえ，全ての通信はTURNサーバを経由
+するため，TURN上でのデータの転送量が非常に多くなるので本研究ではTURN
+サーバを利用していない．
+\subsection{シグナリング}
+WebRTCでは，SDP(Session Description Protocol)と
+ICE Candidateの二つの情報を端末間で交換することによってP2P通信が開始される．
+このSDP等を交換する作業をシグナリングと言う．
+シグナリングを行うためにはSDP等を交換する必要がある．
+シグナリングにはTrickle IceとVanilla Iceの2つの方法がある。
+本研究ではVanilla Iceというシグナリング手法を用いる．
+Vanilla Iceは，実装が容易である，
+シグナリングサーバとの通信回数が少ないというメリットがある一方，
+P2P接続の完了にかかる時間がTrickle Iceより長くなる傾向がある．
+Vanilla Iceの手順について説明する．
+Vanilla Iceの概要図を図\ref{fig:signaling}に示す．
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=10cm]{./assets/image/signaling.png}
+  \caption{シグナリング}
+  \label{fig:signaling}
+\end{figure}
+PeerAがcreateOfferを行いoffer側のSDPの作成準備を行う．
+次にsetLocalDescriptionでSDPを作成し，
+ICE candidateのリストアップを行う．
+ICE candidateのリストアップが完了すると，
+ICE candidateをoffer側のSDPの中に含ませて，PeerOへ送る．
+PeerOはPeerAのoffer側のSDPをsetRemoteDescriptionで受け取り，
+createAnswerでanswer側のSDPの作成準備を行う．
+setLocalDescriptionでSDPを作成し，ICE candidateのリストアップを行う．
+ICE candidateのリストアップが完了するとICE candidateを
+answer側のSDPの中に含ませて，PeerAへ送る．
+PeerAはPeerOのanswer側のSDPをsetRemoteDescriptionで受け取りP2P接続が完了する．
+
 
 \chapter{本論}
+\section{手法}
+
+
+
 \chapter{おわりに}
 \begin{acknowledgment}
 	本研究を進めるにあたり, ご指導を頂いた指導教員の萩原助教授に感謝致します.
