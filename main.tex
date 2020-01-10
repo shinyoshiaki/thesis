@@ -1,6 +1,26 @@
 \documentclass[sotsuron]{jcsie}
 \usepackage[dvipdfmx]{graphicx}
 \usepackage{float}
+\usepackage{listings}
+
+\lstset{
+  basicstyle={\ttfamily},
+  identifierstyle={\small},
+  commentstyle={\smallitshape},
+  keywordstyle={\small\bfseries},
+  ndkeywordstyle={\small},
+  stringstyle={\small\ttfamily},
+  frame={tb},
+  breaklines=true,
+  columns=[l]{fullflexible},
+  numbers=left,
+  xrightmargin=0zw,
+  xleftmargin=3zw,
+  numberstyle={\scriptsize},
+  stepnumber=1,
+  numbersep=1zw,
+  lineskip=-0.5ex
+}
 
 \title{ライブストリーミングに対応した分散ハッシュテーブルの検討}
 \etitle{Title}
@@ -164,42 +184,42 @@ Kademliaには４種類の通信問い合わせがある。名称と内容につ
 \begin{table}[H]
 	\begin{tabular}{|l|l|}
 		\hline
-    名称 & 
-    内容 \\ 
-    \hline
-		PING &              
+		名称 &   
+		内容 \\ 
+		\hline
+		PING   &   
 		\begin{tabular}{l}
 		対象のノードがオンラインかどうかを問い合わせる。
-	  \end{tabular}\\ 
-    \hline
-    STORE &
-	  \begin{tabular}{l}
-    対象ノードにkey,valueの組を保持させる。\\
-    保持させる際のルールは、\\
-    自身のk-bucketsから最もkeyにxorの距離が近いノードを選択し、\\
-    そのノードにkey,valueを与える。\\
-    受け取ったノードは更に自身のk-bucketsから受け取ったkeyに\\
-    最も近いノードを選択し、\\
-    key,valueを与える。この動作を何度も繰り返す。\\
-    最終的にはネットワーク上で最もkeyに距離が近いノードが\\
-    目的のkey,valueを持つ。
-	  \end{tabular}\\
-    \hline
-    FIND\_NODE &
-	  \begin{tabular}{l}
-    自身のk-bucketsのうち最もkeyにxor距離の近いノードに\\
-    自身のノードIDと距離が近い上位K個のノードの情報を送らせる。
-	  \end{tabular}\\
-    \hline
-    FIND\_VALUE &
-	  \begin{tabular}{l}
-    自身のk-bucketsのうち最もkeyにxor距離の近いノードに\\
-    keyと対応するvalueを持っているか問い合わせる。\\
-    持っている場合はそのvalueを、\\
-    持っていない場合は問い合わせられたノード自身のk-bucketsのうち、\\
-    keyに最も近いノードの情報を返す。
-	  \end{tabular}\\
-    \hline
+	\end{tabular}\\ 
+	\hline
+	STORE &
+	\begin{tabular}{l}
+		対象ノードにkey,valueの組を保持させる。                            \\
+		保持させる際のルールは、                                              \\
+		自身のk-bucketsから最もkeyにxorの距離が近いノードを選択し、 \\
+		そのノードにkey,valueを与える。                                        \\
+		受け取ったノードは更に自身のk-bucketsから受け取ったkeyに    \\
+		最も近いノードを選択し、                                              \\
+		key,valueを与える。この動作を何度も繰り返す。                   \\
+		最終的にはネットワーク上で最もkeyに距離が近いノードが    \\
+		目的のkey,valueを持つ。                                                    
+	\end{tabular}\\
+	\hline
+	FIND\_NODE &
+	\begin{tabular}{l}
+		自身のk-bucketsのうち最もkeyにxor距離の近いノードに                   \\
+		自身のノードIDと距離が近い上位K個のノードの情報を送らせる。 
+	\end{tabular}\\
+	\hline
+	FIND\_VALUE &
+	\begin{tabular}{l}
+		自身のk-bucketsのうち最もkeyにxor距離の近いノードに                      \\
+		keyと対応するvalueを持っているか問い合わせる。                          \\
+		持っている場合はそのvalueを、                                                  \\
+		持っていない場合は問い合わせられたノード自身のk-bucketsのうち、 \\
+		keyに最も近いノードの情報を返す。                                           
+	\end{tabular}\\
+	\hline
 	\end{tabular}
 \end{table}
 \subsubsection{ノードの管理}
@@ -290,10 +310,10 @@ P2P接続の完了にかかる時間がTrickle Iceより長くなる傾向があ
 Vanilla Iceの手順について説明する．
 Vanilla Iceの概要図を図\ref{fig:signaling}に示す．
 \begin{figure}[H]
-  \centering
-  \includegraphics[width=10cm]{./assets/image/signaling.png}
-  \caption{シグナリング}
-  \label{fig:signaling}
+	\centering
+	\includegraphics[width=10cm]{./assets/image/signaling.png}
+	\caption{シグナリング}
+	\label{fig:signaling}
 \end{figure}
 PeerAがcreateOfferを行いoffer側のSDPの作成準備を行う．
 次にsetLocalDescriptionでSDPを作成し，
@@ -307,24 +327,142 @@ ICE candidateのリストアップが完了するとICE candidateを
 answer側のSDPの中に含ませて，PeerAへ送る．
 PeerAはPeerOのanswer側のSDPをsetRemoteDescriptionで受け取りP2P接続が完了する．
 
-
 \chapter{本論}
 \section{手法}
 本論文では、Kademliaをベースに効率的にストリーム形式のデータを共有できる
-システムを提案する。
+システムであるLayeredKadを提案する。
+Kademliaはデータを共有する際に、
+そのデータをネットワーク全体に確率的に分散させる。
+そのためKademliaで連続的なストリーム型のデータを共有する場合、
+データのチャンクをネットワーク全体から連続的に探索する必要がある。
+ライブ映像のようなチャンクの生成周期が非常に短く、
+大量のチャンクデータが存在するストリームデータを
+Kademliaで扱う場合、
+ネットワーク全体に対して連続的に負荷がかかることになり、
+非常に効率が悪いことが予測できる。
+そこでLayeredKadでは共有するデータごとに別のKademliaネットワークを作成し
+ネットワーク自体のスコープをデータごとに区切ることで、
+ストリームデータを効率よく共有できるようにする。
 本手法では、共有するデータの情報をメタファイルに保存し、
 Kademliaネットワーク上で共有する。
-Kademliaネットワーク上でそのメタファイルを所有するユーザ同士で
+このメタファイルを共有するネットワークを
+メインネットワークとする。
+メインネットワーク上でそのメタファイルを所有するユーザ同士で
 さらに別のKademliaネットワークを構築し、メタファイルの情報に従い
 データの共有を行う。
+この実体ファイルを共有するネットワークを
+サブネットワークとする。
+メインネットワークとサブネットワークの関係を図\ref{fig:image}
+に示す。
 
-TODO 図
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=10cm]{./assets/image/image.png}
+	\caption{メインネットワークとサブネットワーク}
+	\label{fig:image}
+\end{figure}
+
+\subsection{Network}
+\subsubsection{MainNet}
+Kademliaをベースとしたネットワーク。
+メタデータのやり取りを行う。
+\subsubsection{SubNet}
+Kademliaをベースとしたネットワーク。
+メタデータの指し示すデータのやり取りを行う。
+構造としては、一つのMainNet上に複数のSubNetが存在することになる。
+
+\subsection{Actor}
+ノードはSeeder,Navigator,Userの3つのActorになりうる。
+\subsubsection{Seeder}
+任意のデータをもとにメタデータを作成し、
+メタデータをMainNet上にStoreする。
+MainNet上でメタデータをStoreされたノードはNavigatorとなる。
+また、SeederもNavigatorとして振る舞う
+\subsubsection{User}
+メタデータのURLをもとにMainNet上でメタデータを探索する。
+メタデータの所有者であるNavigatorを仲介としてSeederと接続する。
+SeederとUserのピアはSubNetというKademliaネットワーク上で管理される。
+SubNetと接続しているUserをObserverと呼ぶ
+\subsubsection{Navigator}
+UserからメタデータのFindValue命令を受け取ったら、
+Navigatorと接続されたノード(Seederもしくは、Observer)と
+FindValueを行ったUserとの接続を仲介する。
+
+\subsection{メタデータ}
+LayeredKadでは静的、動的の両方のデータ形式の
+共有に対応するためにメタデータとして
+共有するデータの情報の共有を行う。
+メタデータの基本構造は次のようになっている。
+\begin{lstlisting}
+type Meta = {
+  type: "static" | "stream";
+  name: string;
+  payload: { [key: string]: any };
+};
+\end{lstlisting}
+\subsubsection{StaticMeta}
+静的なデータを扱うメタデータ
+\begin{lstlisting}
+type StaticMeta = Meta & {
+  type: "static";
+  payload: { keys: string[] };
+};
+\end{lstlisting}
+\subsubsection{StreamMeta}
+ストリーム(ライブ映像など)を扱うメタデータ
+\begin{lstlisting}
+type StreamMetaPayload = {
+  first: string;
+  width?: number;
+  height?: number;
+  cycle: number;
+};	
+type StreamMeta = Meta & {
+  type: "stream";
+  payload: StreamMetaPayload;
+};  
+\end{lstlisting}
+
+\subsection{実装}
+TypeScriptを用いてNode.jsとChrome上で動作するように実装を行った。
+P2P通信部部にはWebRTCを用いている。
+
+通常のKademliaと本手法のLayeredKadの性能比較を行うために、
+Node.js上で動作するベンチマーカーの実装を行った。
+なお、ベンチマーカーは実装の都合上P2P通信部分はWebRTCではなく、
+UDPを使用している。
+
+\subsection{仮説}
+本論文では、データ通信量と、タスクの処理時間の2つの観点から、
+LayeredKadの評価を行う。
+現実的なユースケースを想定し、
+幾つかのファイルがネットワーク上に共有され、
+それぞれのファイルに関心があるユーザがそれぞれのグループを形成して
+共有しあっているケースを想定し仮説を立てる。
+\subsubsection{データ通信量}
+LayeredKadでは共有するデータごとにネットワークを分割しており、
+データの保存や探索がネットワーク全体に影響しないので、
+Kademliaとノード数が同じであれば、ネットワーク全体における、
+データ通信量が少なくなることが予想される。
+ファイル共有サービスにおいてファイル共有速度の最も大きな
+ボトルネックはネットワークの通信速度であるので、
+データ通信量が少ないことはメリットである。
+\subsubsection{タスクの処理時間}
+LayeredKadはKademliaをさらに構造化したシステムであるため、
+単純に一つのファイルを共有するようなケースでは、
+当然、Kademliaの方が高速である。
+しかし、今回のケースではKademliaはすべてのファイルについての
+処理においてもネットワーク全体で処理を行う必要があるのに対して、
+LayeredKadではユーザグループ（SubNet）内で完結するため、
+処理効率がよく、タスクの処理時間も短くなると考えられる。
+
+\subsection{結果}
 
 
 \chapter{おわりに}
 \begin{acknowledgment}
-本研究を進めるにあたり, ご指導を頂いた指導教員の萩原助教授に感謝致します.
-日頃の議論において助言や知識を頂いた萩原研究室の皆様に感謝します.
+	本研究を進めるにあたり, ご指導を頂いた指導教員の萩原助教授に感謝致します.
+	日頃の議論において助言や知識を頂いた萩原研究室の皆様に感謝します.
 \end{acknowledgment}
 \nocite{*}
 \bibliographystyle{plain}
