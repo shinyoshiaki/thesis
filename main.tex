@@ -363,16 +363,17 @@ Kademliaネットワーク上で共有する。
 \end{figure}
 
 \subsection{Network}
-\subsubsection{MainNet}
+\subsubsection{MainNet(メインネットワーク)}
 Kademliaをベースとしたネットワーク。
 メタデータのやり取りを行う。
-\subsubsection{SubNet}
+\subsubsection{SubNet(サブネットワーク)}
 Kademliaをベースとしたネットワーク。
 メタデータの指し示すデータのやり取りを行う。
 構造としては、一つのMainNet上に複数のSubNetが存在することになる。
 
 \subsection{Actor}
 ノードはSeeder,Navigator,Userの3つのActorになりうる。
+一つのノードは複数のActorに同時になりうる。
 \subsubsection{Seeder}
 任意のデータをもとにメタデータを作成し、
 メタデータをMainNet上にStoreする。
@@ -387,6 +388,8 @@ SubNetと接続しているUserをObserverと呼ぶ
 UserからメタデータのFindValue命令を受け取ったら、
 Navigatorと接続されたノード(Seederもしくは、Observer)と
 FindValueを行ったUserとの接続を仲介する。
+
+データを共有する流れを示す。
 
 \subsection{メタデータ}
 LayeredKadでは静的、動的の両方のデータ形式の
@@ -469,11 +472,31 @@ LayeredKadではユーザグループ（SubNet）内で完結するため、
 	\begin{tabular}{|l|l|}
 		\hline
 		CPU & 
-		Intel Core i7-7500U 2.70GHz \\ \hline	
+		Intel Core i7-7500U 2.70GHz 2Core 4Threads\\ \hline	
 		RAM &
 		8GB \\ \hline	
 		OS &
 		Ubuntu 19.10 \\ \hline
+	\end{tabular}	
+\end{table}
+
+\subsubsection{タスク処理時間}
+タスク処理時間の計測を行うために、KademliaとLayeredKadで
+タスク処理時間の計測を行うベンチマークプログラムを作成した。
+ベンチマークプログラムは表\ref{table:spec-ryzen}の環境で実行した。
+
+\begin{table}[H]
+	\caption{スペック}	
+	\centering
+	\label{table:spec-ryzen}
+	\begin{tabular}{|l|l|}
+		\hline
+		CPU & 
+		Ryzen Threadripper 2950X 3.50Ghz 16Core 32Threads \\ \hline	
+		RAM &
+		?GB \\ \hline	
+		OS &
+		Ubuntu 18.04 \\ \hline
 	\end{tabular}	
 \end{table}
 
