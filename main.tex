@@ -457,7 +457,25 @@ LayeredKadではユーザグループ（SubNet）内で完結するため、
 処理効率がよく、タスクの処理時間も短くなると考えられる。
 
 \subsection{結果}
+\subsubsection{データ通信量}
+データ通信量の計測を行うために、KademliaとLayeredKadで
+データ通信量の計測を行うベンチマークプログラムを作成した。
+ベンチマークプログラムは表\ref{table:spec-note}の環境で実行した。
 
+\begin{table}[H]
+	\caption{スペック}	
+	\centering
+	\label{table:spec-note}
+	\begin{tabular}{|l|l|}
+		\hline
+		CPU & 
+		Intel Core i7-7500U 2.70GHz \\ \hline	
+		RAM &
+		8GB \\ \hline	
+		OS &
+		Ubuntu 19.10 \\ \hline
+	\end{tabular}	
+\end{table}
 
 \chapter{おわりに}
 \begin{acknowledgment}
