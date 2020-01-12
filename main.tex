@@ -495,8 +495,46 @@ LayeredKadではユーザグループ（SubNet）内で完結するため、
 	\label{fig:trafficBenchmark}
 \end{figure}
 
+ノード数を変数パラメータとして、パラメータを増加させて
+LayeredKadとKademliaのデータ通信回数を記録し、比較を行う。
+
 \subsubsection{実験結果}
 
+\begin{table}[H]
+	\caption{実験結果}	
+	\centering
+	\label{table:traffic-result}
+	\begin{tabular}{|l|l|l|}
+		\hline
+		ノード数 &   
+		Layered Kad &
+		Kademlia\\ 
+		\hline
+		10 &
+		10 &
+		380\\
+		\hline
+		30 &
+		16 &
+		729\\
+		\hline
+		40 &
+		32 &
+		1026\\
+		\hline
+		50 &
+		33 &
+		1278\\
+		\hline
+	\end{tabular}	
+\end{table}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=10cm]{./assets/image/traffic_graph.png}
+	\caption{通信量ベンチマークのグラフ}
+	\label{fig:traffic-graph}
+\end{figure}
 
 \subsection{タスク処理時間}
 \subsubsection{実験}
