@@ -464,6 +464,17 @@ LayeredKadではユーザグループ（SubNet）内で完結するため、
 データ通信量の計測を行うために、KademliaとLayeredKadで
 データ通信量の計測を行うベンチマークプログラムを作成した。
 ベンチマークプログラムは表\ref{table:spec-note}の環境で実行した。
+本ベンチマークプログラムでは、ノードのペアを1グループとして、
+ファイル共有を行わせる。
+ベンチマークプログラムのシナリオのイメージを
+図\ref{fig:trafficBenchmark}に示す
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=10cm]{./assets/image/traffic_benchmark.png}
+	\caption{メインネットワークとサブネットワーク}
+	\label{fig:trafficBenchmark}
+\end{figure}
 
 \begin{table}[H]
 	\caption{スペック}	
@@ -471,14 +482,16 @@ LayeredKadではユーザグループ（SubNet）内で完結するため、
 	\label{table:spec-note}
 	\begin{tabular}{|l|l|}
 		\hline
-		CPU & 
+		CPU &   
 		Intel Core i7-7500U 2.70GHz 2Core 4Threads\\ \hline	
-		RAM &
+		RAM &   
 		8GB \\ \hline	
-		OS &
+		OS  &   
 		Ubuntu 19.10 \\ \hline
 	\end{tabular}	
 \end{table}
+
+
 
 \subsubsection{タスク処理時間}
 タスク処理時間の計測を行うために、KademliaとLayeredKadで
@@ -491,11 +504,11 @@ LayeredKadではユーザグループ（SubNet）内で完結するため、
 	\label{table:spec-ryzen}
 	\begin{tabular}{|l|l|}
 		\hline
-		CPU & 
+		CPU &   
 		Ryzen Threadripper 2950X 3.50Ghz 16Core 32Threads \\ \hline	
-		RAM &
+		RAM &   
 		?GB \\ \hline	
-		OS &
+		OS  &   
 		Ubuntu 18.04 \\ \hline
 	\end{tabular}	
 \end{table}
