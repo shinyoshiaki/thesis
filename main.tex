@@ -426,7 +426,7 @@ type StreamMeta = Meta & {
 };  
 \end{lstlisting}
 
-\subsection{実装}
+\section{実装}
 TypeScriptを用いてNode.jsとChrome上で動作するように実装を行った。
 P2P通信部部にはWebRTCを用いている。
 
@@ -435,14 +435,14 @@ Node.js上で動作するベンチマーカーの実装を行った。
 なお、ベンチマーカーは実装の都合上P2P通信部分はWebRTCではなく、
 UDPを使用している。
 
-\subsection{仮説}
+\section{仮説}
 本論文では、データ通信量と、タスクの処理時間の2つの観点から、
 LayeredKadの評価を行う。
 現実的なユースケースを想定し、
 幾つかのファイルがネットワーク上に共有され、
 それぞれのファイルに関心があるユーザがそれぞれのグループを形成して
 共有しあっているケースを想定し仮説を立てる。
-\subsubsection{データ通信量}
+\subsection{データ通信量}
 LayeredKadでは共有するデータごとにネットワークを分割しており、
 データの保存や探索がネットワーク全体に影響しないので、
 Kademliaとノード数が同じであれば、ネットワーク全体における、
@@ -450,7 +450,7 @@ Kademliaとノード数が同じであれば、ネットワーク全体におけ
 ファイル共有サービスにおいてファイル共有速度の最も大きな
 ボトルネックはネットワークの通信速度であるので、
 データ通信量が少ないことはメリットである。
-\subsubsection{タスクの処理時間}
+\subsection{タスクの処理時間}
 LayeredKadはKademliaをさらに構造化したシステムであるため、
 単純に一つのファイルを共有するようなケースでは、
 当然、Kademliaの方が高速である。
@@ -459,22 +459,14 @@ LayeredKadはKademliaをさらに構造化したシステムであるため、
 LayeredKadではユーザグループ（SubNet）内で完結するため、
 処理効率がよく、タスクの処理時間も短くなると考えられる。
 
-\subsection{結果}
-\subsubsection{データ通信量}
+\section{結果}
+\subsection{データ通信量}
+
+\subsubsection{実験}
+
 データ通信量の計測を行うために、KademliaとLayeredKadで
 データ通信量の計測を行うベンチマークプログラムを作成した。
 ベンチマークプログラムは表\ref{table:spec-note}の環境で実行した。
-本ベンチマークプログラムでは、ノードのペアを1グループとして、
-ファイル共有を行わせる。
-ベンチマークプログラムのシナリオのイメージを
-図\ref{fig:trafficBenchmark}に示す
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=10cm]{./assets/image/traffic_benchmark.png}
-	\caption{メインネットワークとサブネットワーク}
-	\label{fig:trafficBenchmark}
-\end{figure}
 
 \begin{table}[H]
 	\caption{スペック}	
@@ -491,9 +483,23 @@ LayeredKadではユーザグループ（SubNet）内で完結するため、
 	\end{tabular}	
 \end{table}
 
+本ベンチマークプログラムでは、ノードのペアを1グループとして、
+ファイル共有を行わせる。
+ベンチマークプログラムのシナリオのイメージを
+図\ref{fig:trafficBenchmark}に示す
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=10cm]{./assets/image/traffic_benchmark.png}
+	\caption{通信量ベンチマークのイメージ}
+	\label{fig:trafficBenchmark}
+\end{figure}
+
+\subsubsection{実験結果}
 
 
-\subsubsection{タスク処理時間}
+\subsection{タスク処理時間}
+\subsubsection{実験}
 タスク処理時間の計測を行うために、KademliaとLayeredKadで
 タスク処理時間の計測を行うベンチマークプログラムを作成した。
 ベンチマークプログラムは表\ref{table:spec-ryzen}の環境で実行した。
