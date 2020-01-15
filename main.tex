@@ -569,6 +569,54 @@ LayeredKadとKademliaのデータ通信回数を記録し、比較を行う。
 	\end{tabular}	
 \end{table}
 
+ベンチマークプログラムのシナリオはデータ通信量のベンチマーカーと
+同じであるが、タスク処理時間をより正確に計測するために、
+1ノードに付き、CPUのスレッド1つを割り当てるようにベンチマークプログラムの
+マルチスレッド化を行っている。本実験では、ノード数は16ノードで固定とし、
+共有するデータ数のチャンキング数を変数として実験を行う。
+
+\subsubsection{実験結果}
+
+\begin{table}[H]
+	\caption{実験結果}	
+	\centering
+	\label{table:calc-result}
+	\begin{tabular}{|l|l|l|}
+		\hline
+		チャンク数 &   
+		Layered Kad &
+		Kademlia\\ 
+		\hline
+		1 &
+		2.098 &
+		0.636\\
+		\hline
+		4 &
+		2.728 &
+		2.032\\
+		\hline
+		5 &
+		2.469 &
+		2.435\\
+		\hline
+		6 &
+		2.581 &
+		2.679\\
+		\hline
+	\end{tabular}	
+\end{table}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=10cm]{./assets/image/calc_compare.png}
+	\caption{タスク処理時間の比較}
+	\label{fig:calc_compare.png}
+\end{figure}
+
+\section{考察}
+\subsection{通信量}
+\subsection{タスク処理時間}
+
 \chapter{おわりに}
 \begin{acknowledgment}
 	本研究を進めるにあたり, ご指導を頂いた指導教員の萩原助教授に感謝致します.
