@@ -2,10 +2,23 @@
   "latex-workshop.latex.recipes": [
     {
       "name": "compile",
-      "tools": ["ptex2pdf"]
+      "tools": ["ptex2pdf", "bibtex", "ptex2pdf", "ptex2pdf"]
     }
   ],
   "latex-workshop.latex.tools": [
+    {
+      "name": "bibtex",
+      "command": "docker",
+      "args": [
+        "run",
+        "--rm",
+        "-v",
+        "%DIR%:/workdir",
+        "paperist/alpine-texlive-ja",
+        "bibtex",
+        "%DOCFILE%"
+      ]
+    },
     {
       "name": "ptex2pdf",
       "command": "docker",
