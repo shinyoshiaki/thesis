@@ -35,43 +35,43 @@
 \emaketitle
 \pagenumbering{roman}
 \begin{abstract}    
-分散ハッシュテーブルはファイル共有サービス等に応用され、
-すでに普及している一方で、
-近年はブロックチェーンの関連技術としても注目を集めている。
-分散ハッシュテーブルの中でもKademlia\cite{maymounkov2002kademlia}
-はその実装の容易さとノードの出入りに対する耐性の強さから
-実用的なサービスへの応用が可能であり、
-多くのサービスで採用されている。
-近年、ライブストリーミングサービスの需要が高まっている
-一方で配信プラットフォームの事業者への依存が強く
-サービス利用者の立場は弱いものとなっている。
-そこで本論文では
-分散的なライブストリーミングサービスの基盤となる
-システムをKademliaを元に実装し、その評価を行った。
-Kademlia上で単純にライブストリーミングの実装を行う場合、
-非効率的な通信が発生するが、本論文の手法では、
-Kademliaネットワークを更に構造化することで
-非効率的な通信を削減することが可能となった。
-結果、分散的なライブストリーミングサービスの実装への
-足がかりを作ることが出来た。
+	分散ハッシュテーブルはファイル共有サービス等に応用され、
+	すでに普及している一方で、
+	近年はブロックチェーンの関連技術としても注目を集めている。
+	分散ハッシュテーブルの中でもKademlia\cite{maymounkov2002kademlia}
+	はその実装の容易さとノードの出入りに対する耐性の強さから
+	実用的なサービスへの応用が可能であり、
+	多くのサービスで採用されている。
+	近年、ライブストリーミングサービスの需要が高まっている
+	一方で配信プラットフォームの事業者への依存が強く
+	サービス利用者の立場は弱いものとなっている。
+	そこで本論文では
+	分散的なライブストリーミングサービスの基盤となる
+	システムをKademliaを元に実装し、その評価を行った。
+	Kademlia上で単純にライブストリーミングの実装を行う場合、
+	非効率的な通信が発生するが、本論文の手法では、
+	Kademliaネットワークを更に構造化することで
+	非効率的な通信を削減することが可能となった。
+	結果、分散的なライブストリーミングサービスの実装への
+	足がかりを作ることが出来た。
 \end{abstract}
 \begin{eabstract}
-While distributed hash tables have been widely used in file-sharing services,
-they have recently attracted attention as a blockchain-related technology. 
-Among the distributed hash tables, 
-Kademlia can be applied to practical services because of 
-its ease of implementation and resistance to incoming and outgoing nodes, 
-and it is used in many services. 
-In recent years, while the demand for live streaming services has been 
-increasing, there has been a strong dependence on providers of distribution 
-platforms, and the position of service users has become weak. 
-In this paper, we evaluate a system based on Kademlia, 
-which is the basis of distributed live streaming services. 
-When live streaming is simply implemented on Kademlia, 
-inefficient communication occurs, but this paper can reduce inefficient 
-communication by further structuring the Kademlia network. 
-As a result, we were able to create a foothold for implementing a 
-distributed live streaming service.
+	While distributed hash tables have been widely used in file-sharing services,
+	they have recently attracted attention as a blockchain-related technology. 
+	Among the distributed hash tables, 
+	Kademlia can be applied to practical services because of 
+	its ease of implementation and resistance to incoming and outgoing nodes, 
+	and it is used in many services. 
+	In recent years, while the demand for live streaming services has been 
+	increasing, there has been a strong dependence on providers of distribution 
+	platforms, and the position of service users has become weak. 
+	In this paper, we evaluate a system based on Kademlia, 
+	which is the basis of distributed live streaming services. 
+	When live streaming is simply implemented on Kademlia, 
+	inefficient communication occurs, but this paper can reduce inefficient 
+	communication by further structuring the Kademlia network. 
+	As a result, we were able to create a foothold for implementing a 
+	distributed live streaming service.
 \end{eabstract}
 \tableofcontents
 \pagenumbering{arabic}
@@ -509,24 +509,24 @@ LayeredKadとKademliaのデータ通信回数を記録し、比較を行う。
 	\label{table:traffic-result}
 	\begin{tabular}{|l|l|l|}
 		\hline
-		ノード数 &   
-		Layered Kad  &   
-		Kademlia\\ 
+		ノード数     &   
+		Layered Kad(回) &   
+		Kademlia (回)\\ 
 		\hline
-		10           &   
-		10           &   
+		10               &   
+		10               &   
 		380\\
 		\hline
-		30           &   
-		16           &   
+		30               &   
+		16               &   
 		729\\
 		\hline
-		40           &   
-		32           &   
+		40               &   
+		32               &   
 		1026\\
 		\hline
-		50           &   
-		33           &   
+		50               &   
+		33               &   
 		1278\\
 		\hline
 	\end{tabular}	
@@ -587,8 +587,8 @@ LayeredKadとKademliaのデータ通信回数を記録し、比較を行う。
 	\begin{tabular}{|l|l|l|}
 		\hline
 		チャンク数 &   
-		Layered Kad     &   
-		Kademlia\\ 
+		Layered Kad (s) &   
+		Kademlia (s)\\ 
 		\hline
 		1               &   
 		2.098           &   
