@@ -35,43 +35,43 @@
 \emaketitle
 \pagenumbering{roman}
 \begin{abstract}    
-分散ハッシュテーブルはファイル共有サービス等に応用され、
-すでに普及している一方で、
-近年はブロックチェーンの関連技術としても注目を集めている。
-分散ハッシュテーブルの中でもKademlia
-はその実装の容易さとノードの出入りに対する耐性の強さから
-実用的なサービスへの応用が可能であり、
-多くのサービスで採用されている。
-近年、ライブストリーミングサービスの需要が高まっている
-一方で配信プラットフォームの事業者への依存が強く
-サービス利用者の立場は弱いものとなっている。
-そこで本論文では
-分散的なライブストリーミングサービスの基盤となる
-システムをKademliaを元に実装し、その評価を行った。
-Kademlia上で単純にライブストリーミングの実装を行う場合、
-非効率的な通信が発生するが、本論文の手法では、
-Kademliaネットワークを更に構造化することで
-非効率的な通信を削減することが可能となった。
-結果、分散的なライブストリーミングサービスの実装への
-足がかりを作ることが出来た。
+	分散ハッシュテーブルはファイル共有サービス等に応用され、
+	すでに普及している一方で、
+	近年はブロックチェーンの関連技術としても注目を集めている。
+	分散ハッシュテーブルの中でもKademlia
+	はその実装の容易さとノードの出入りに対する耐性の強さから
+	実用的なサービスへの応用が可能であり、
+	多くのサービスで採用されている。
+	近年、ライブストリーミングサービスの需要が高まっている
+	一方で配信プラットフォームの事業者への依存が強く
+	サービス利用者の立場は弱いものとなっている。
+	そこで本論文では
+	分散的なライブストリーミングサービスの基盤となる
+	システムをKademliaを元に実装し、その評価を行った。
+	Kademlia上で単純にライブストリーミングの実装を行う場合、
+	非効率的な通信が発生するが、本論文の手法では、
+	Kademliaネットワークを更に構造化することで
+	非効率的な通信を削減することが可能となった。
+	結果、分散的なライブストリーミングサービスの実装への
+	足がかりを作ることが出来た。
 \end{abstract}
 \begin{eabstract}
-While distributed hash tables have been widely used in file-sharing services,
-they have recently attracted attention as a blockchain-related technology. 
-Among the distributed hash tables, 
-Kademlia can be applied to practical services because of 
-its ease of implementation and resistance to incoming and outgoing nodes, 
-and it is used in many services. 
-In recent years, while the demand for live streaming services has been 
-increasing, there has been a strong dependence on providers of distribution 
-platforms, and the position of service users has become weak. 
-In this paper, we evaluate a system based on Kademlia, 
-which is the basis of distributed live streaming services. 
-When live streaming is simply implemented on Kademlia, 
-inefficient communication occurs, but this paper can reduce inefficient 
-communication by further structuring the Kademlia network. 
-As a result, we were able to create a foothold for implementing a 
-distributed live streaming service.
+	While distributed hash tables have been widely used in file-sharing services,
+	they have recently attracted attention as a blockchain-related technology. 
+	Among the distributed hash tables, 
+	Kademlia can be applied to practical services because of 
+	its ease of implementation and resistance to incoming and outgoing nodes, 
+	and it is used in many services. 
+	In recent years, while the demand for live streaming services has been 
+	increasing, there has been a strong dependence on providers of distribution 
+	platforms, and the position of service users has become weak. 
+	In this paper, we evaluate a system based on Kademlia, 
+	which is the basis of distributed live streaming services. 
+	When live streaming is simply implemented on Kademlia, 
+	inefficient communication occurs, but this paper can reduce inefficient 
+	communication by further structuring the Kademlia network. 
+	As a result, we were able to create a foothold for implementing a 
+	distributed live streaming service.
 \end{eabstract}
 \tableofcontents
 \pagenumbering{arabic}
@@ -126,7 +126,7 @@ Webブラウザで動作する唯一のP2P通信規格でもある。
 完成したライブラリを用いてWebブラウザ上で動作する
 分散ライブ動画配信アプリのサンプルを開発し動作確認を行う。
 
-\chapter{知識}
+\chapter{関連研究}
 \section{分散ハッシュテーブル}
 分散ハッシュテーブルとは、分散型のkey-valueストアを実現する手法であり、
 あるデータとそのハッシュ値をペアとしたハッシュテーブルを
@@ -341,8 +341,7 @@ ICE candidateのリストアップが完了するとICE candidateを
 answer側のSDPの中に含ませて，PeerAへ送る．
 PeerAはPeerOのanswer側のSDPをsetRemoteDescriptionで受け取りP2P接続が完了する．
 
-\chapter{本論}
-\section{手法}
+\chapter{手法}
 本論文では、Kademliaをベースに効率的にストリーム形式のデータを共有できる
 システムであるLayeredKadを提案する。
 Kademliaはデータを共有する際に、
@@ -376,36 +375,36 @@ Kademliaネットワーク上で共有する。
 	\label{fig:image}
 \end{figure}
 
-\subsection{Network}
-\subsubsection{MainNet(メインネットワーク)}
+\section{Network}
+\subsection{MainNet(メインネットワーク)}
 Kademliaをベースとしたネットワーク。
 メタデータのやり取りを行う。
-\subsubsection{SubNet(サブネットワーク)}
+\subsection{SubNet(サブネットワーク)}
 Kademliaをベースとしたネットワーク。
 メタデータの指し示すデータのやり取りを行う。
 構造としては、一つのMainNet上に複数のSubNetが存在することになる。
 
-\subsection{Actor}
+\section{Actor}
 ノードはSeeder,Navigator,Userの3つのActorになりうる。
 一つのノードは複数のActorに同時になりうる。
-\subsubsection{Seeder}
+\subsection{Seeder}
 任意のデータをもとにメタデータを作成し、
 メタデータをMainNet上にStoreする。
 MainNet上でメタデータをStoreされたノードはNavigatorとなる。
 また、SeederもNavigatorとして振る舞う
-\subsubsection{User}
+\subsection{User}
 メタデータのURLをもとにMainNet上でメタデータを探索する。
 メタデータの所有者であるNavigatorを仲介としてSeederと接続する。
 SeederとUserのピアはSubNetというKademliaネットワーク上で管理される。
 SubNetと接続しているUserをObserverと呼ぶ
-\subsubsection{Navigator}
+\subsection{Navigator}
 UserからメタデータのFindValue命令を受け取ったら、
 Navigatorと接続されたノード(Seederもしくは、Observer)と
 FindValueを行ったUserとの接続を仲介する。
 
 データを共有する流れを示す。
 
-\subsection{メタデータ}
+\section{メタデータ}
 LayeredKadでは静的、動的の両方のデータ形式の
 共有に対応するためにメタデータとして
 共有するデータの情報の共有を行う。
@@ -417,7 +416,7 @@ type Meta = {
   payload: { [key: string]: any };
 };
 \end{lstlisting}
-\subsubsection{StaticMeta}
+\subsection{StaticMeta}
 静的なデータを扱うメタデータ
 \begin{lstlisting}
 type StaticMeta = Meta & {
@@ -425,7 +424,7 @@ type StaticMeta = Meta & {
   payload: { keys: string[] };
 };
 \end{lstlisting}
-\subsubsection{StreamMeta}
+\subsection{StreamMeta}
 ストリーム(ライブ映像など)を扱うメタデータ
 \begin{lstlisting}
 type StreamMetaPayload = {
@@ -449,14 +448,14 @@ Node.js上で動作するベンチマーカーの実装を行った。
 なお、ベンチマーカーは実装の都合上P2P通信部分はWebRTCではなく、
 UDPを使用している。
 
-\section{仮説}
+\chapter{仮説}
 本論文では、データ通信量と、タスクの処理時間の2つの観点から、
 LayeredKadの評価を行う。
 現実的なユースケースを想定し、
 幾つかのファイルがネットワーク上に共有され、
 それぞれのファイルに関心があるユーザがそれぞれのグループを形成して
 共有しあっているケースを想定し仮説を立てる。
-\subsection{データ通信量}
+\section{データ通信量}
 LayeredKadでは共有するデータごとにネットワークを分割しており、
 データの保存や探索がネットワーク全体に影響しないので、
 Kademliaとノード数が同じであれば、ネットワーク全体における、
@@ -464,7 +463,7 @@ Kademliaとノード数が同じであれば、ネットワーク全体におけ
 ファイル共有サービスにおいてファイル共有速度の最も大きな
 ボトルネックはネットワークの通信速度であるので、
 データ通信量が少ないことはメリットである。
-\subsection{タスクの処理時間}
+\section{タスクの処理時間}
 LayeredKadはKademliaをさらに構造化したシステムであるため、
 単純に一つのファイルを共有するようなケースでは、
 当然、Kademliaの方が高速である。
@@ -473,10 +472,9 @@ LayeredKadはKademliaをさらに構造化したシステムであるため、
 LayeredKadではユーザグループ（SubNet）内で完結するため、
 処理効率がよく、タスクの処理時間も短くなると考えられる。
 
-\section{結果}
-\subsection{データ通信量}
-
-\subsubsection{実験}
+\chapter{結果}
+\section{データ通信量}
+\subsection{実験}
 
 データ通信量の計測を行うために、KademliaとLayeredKadで
 データ通信量の計測を行うベンチマークプログラムを作成した。
@@ -512,7 +510,7 @@ LayeredKadではユーザグループ（SubNet）内で完結するため、
 ノード数を変数パラメータとして、パラメータを増加させて
 LayeredKadとKademliaのデータ通信回数を記録し、比較を行う。
 
-\subsubsection{実験結果}
+\subsection{実験結果}
 
 \begin{table}[H]
 	\caption{実験結果}	
@@ -562,8 +560,8 @@ LayeredKadとKademliaのデータ通信回数を記録し、比較を行う。
 	\label{fig:traffic-graph}
 \end{figure}
 
-\subsection{タスク処理時間}
-\subsubsection{実験}
+\section{タスク処理時間}
+\subsection{実験}
 タスク処理時間の計測を行うために、KademliaとLayeredKadで
 タスク処理時間の計測を行うベンチマークプログラムを作成した。
 ベンチマークプログラムは表\ref{table:spec-ryzen}の環境で実行した。
@@ -589,7 +587,7 @@ LayeredKadとKademliaのデータ通信回数を記録し、比較を行う。
 マルチスレッド化を行っている。本実験では、ノード数は16ノードで固定とし、
 共有するデータ数のチャンキング数を変数として実験を行う。
 
-\subsubsection{実験結果}
+\subsection{実験結果}
 
 \begin{table}[H]
 	\caption{実験結果}	
@@ -627,13 +625,13 @@ LayeredKadとKademliaのデータ通信回数を記録し、比較を行う。
 	\label{fig:calc_compare.png}
 \end{figure}
 
-\section{考察}
-\subsection{通信量}
+\chapter{考察}
+\section{データ通信量}
 実験結果は、仮説の通りの結果となった。
 ただし、この結果はベンチマークのシナリオが
 LayeredKadが共有するデータ毎に別のネットワークを構築するという性質に
 有利な設定であるため、これほどの性能差が出たと考えられる。
-\subsection{タスク処理時間}
+\section{タスク処理時間}
 LayeredKadではデータのチャンキング数が増加しても
 タスク処理時間は概ね変化しないのに対して、
 Kademliaではチャンキング数の増加に対してタスク処理時間が比例増大
@@ -675,8 +673,8 @@ LayeredKadでは実体のデータはデータを利用するユーザ間での�
 検証しておらず、未知の問題が存在する可能性がある。
 
 \begin{acknowledgment}
-本研究を進めるにあたり, ご指導を頂いた指導教員の萩原助教授に感謝致します.
-日頃の議論において助言や知識を頂いた萩原研究室の皆様に感謝します.
+	本研究を進めるにあたり, ご指導を頂いた指導教員の萩原助教授に感謝致します.
+	日頃の議論において助言や知識を頂いた萩原研究室の皆様に感謝します.
 \end{acknowledgment}
 
 \bibliographystyle{unsrt}
