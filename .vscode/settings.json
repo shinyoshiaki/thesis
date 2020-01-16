@@ -1,7 +1,11 @@
 {
   "latex-workshop.latex.recipes": [
     {
-      "name": "compile",
+      "name": "witout bibtex",
+      "tools": ["ptex2pdf"]
+    },
+    {
+      "name": "full compile",
       "tools": ["ptex2pdf", "bibtex", "ptex2pdf", "ptex2pdf"]
     }
   ],
