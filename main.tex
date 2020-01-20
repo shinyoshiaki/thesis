@@ -99,10 +99,11 @@ P2Pネットワーク技術を利用した分散型ファイル共有サービ�
 近年の家庭用ネットワークやモバイルネットワークの環境改善に伴い
 Youtube Live\footnote{https://www.youtube.com/live} や 
 Twitch\footnote{https://www.twitch.tv} 
-といった動画ライブストリーミングサービスが急速に普及してきている。
+といった高いスループットが要求される動画ライブストリーミングサービス
+が急速に普及してきている。
 しかし、これらのサービスは膨大なサーバリソースを持つ大企業
 や大企業の提供するクラウド環境を利用するなどしなければ実現できず、
-プラットフォーム事業者、クラウド事業者への依存が強く、
+プラットフォーム事業者やクラウド事業者への依存が強く、
 サービス利用者の立場は弱いものとなっており不健全な状態にある。
 
 \section{目的}
@@ -358,18 +359,18 @@ PeerAはPeerOのanswer側のSDPをsetRemoteDescriptionで受け取りP2P接続�
 システムであるLayeredKadを提案する。
 
 Kademliaはデータを共有する際に、
-そのデータをネットワーク全体に確率的に分散させる。
+そのデータをアルゴリズムに従いネットワーク全体に確率的に分散させる。
 そのためKademliaで連続的なストリーム形式のデータを共有する場合、
 個々のストリームのチャンクデータをネットワーク全体に対し
-問い合わせを行い、保存する必要がある。
+問い合わせを行い、処理する必要がある。
 ライブ映像のようなチャンクの生成周期が非常に短く、
 高頻度にデータ共有する必要がある場合、Kademliaでは、
-ネットワーク全体に対して連続的に負荷をかけることになり、
-データ共有の効率が非常に悪いことが予測される。
+ネットワーク全体に対して連続的にその都度、負荷をかけることになり、
+データ共有の効率が非常に悪化することが予測される。
 
 そこでLayeredKadでは共有するデータごとに別のKademliaネットワークを作成し
 ネットワーク自体のスコープをデータごとに区切ることで、
-ストリームデータを効率よく共有できるようにする。
+ストリームデータのような連続的なデータでも効率よく共有できるようにする。
 
 本手法では、共有するデータの情報をメタファイルに保存し、
 Kademliaネットワーク上で共有する。
@@ -389,57 +390,6 @@ Kademliaネットワーク上で共有する。
 	\label{fig:image}
 \end{figure}
 
-\section{MainNet}
-Kademliaをベースとしたネットワーク。ここでメタデータのやり取りと、
-新規参加ノードとSubNetとの橋渡しを行う。
-\subsection{プロトコル}
-\subsubsection{Store}
-StoreはMainNet上にメタデータを保存する命令である。
-
-Storeの型定義を以下に示す。
-\begin{lstlisting}
-	type Store = (meta: Meta) => 
-		Promise<{ url: string, peers: Peer[] }>
-\end{lstlisting}
-Storeはメタデータを引数として実行する。
-実行結果としてメタデータが保存されたアドレス(url)と
-メタデータを受け取ったノードらの情報(peers)を返す。
-
-\subsubsection{FindValue}
-FindValueはurlに対応するメタデータを探す命令である。
-
-FindValueの型定義を以下に示す。
-\begin{lstlisting}
-	type Store = (url: string) => 
-		Promise<{ meta: Meta, peer: Peer }>
-\end{lstlisting}
-FindValueはurl文字列を引数として実行する。
-実行結果としてメタデータ(meta)と、
-そのメタデータを返却してきたノードの情報(peer)を返す。
-
-\section{SubNet}
-Kademliaをベースとしたネットワーク。
-メタデータの指し示すデータのやり取りを行う。
-構造としては、一つのMainNet上に複数のSubNetが存在することになる。
-
-\section{Actor}
-ノードはSeeder,Navigator,Userの3つのActorになりうる。
-一つのノードは複数のActorに同時になりうる。
-\section{Seeder}
-任意のデータをもとにメタデータを作成し、
-メタデータをMainNet上にStoreする。
-MainNet上でメタデータをStoreされたノードはNavigatorとなる。
-また、SeederもNavigatorとして振る舞う
-\section{User}
-メタデータのURLをもとにMainNet上でメタデータを探索する。
-メタデータの所有者であるNavigatorを仲介としてSeederと接続する。
-SeederとUserのピアはSubNetというKademliaネットワーク上で管理される。
-SubNetと接続しているUserをObserverと呼ぶ
-\section{Navigator}
-UserからメタデータのFindValue命令を受け取ったら、
-Navigatorと接続されたノード(Seederもしくは、Observer)と
-FindValueを行ったUserとの接続を仲介する。
-
 \section{メタデータ}
 LayeredKadでは静的、動的の両方のデータ形式の
 共有に対応するためにメタデータとして
@@ -452,6 +402,14 @@ type Meta = {
   payload: { [key: string]: any };
 };
 \end{lstlisting}
+
+typeはメタデータの種類を表す。
+本論文ではstaticとstreamの二種類が存在する。
+
+nameはメタデータの名前である。nameには任意の文字列を与える。
+
+payloadには実体データに関する情報を与える。
+
 \subsection{StaticMeta}
 静的なデータを扱うメタデータ
 \begin{lstlisting}
@@ -460,6 +418,9 @@ type StaticMeta = Meta & {
   payload: { keys: string[] };
 };
 \end{lstlisting}
+
+payloadのkeysが実体データのハッシュキーの集合である。
+
 \subsection{StreamMeta}
 ストリーム(ライブ映像など)を扱うメタデータ
 \begin{lstlisting}
@@ -474,6 +435,129 @@ type StreamMeta = Meta & {
   payload: StreamMetaPayload;
 };  
 \end{lstlisting}
+
+payloadのfirstが実体データのストリームデータの
+最初のチャンクのハッシュキーである。
+
+width,heightは動画の縦横のピクセル数である。
+
+cycleには "$ 1000 \div フレームレート $" の値を与える.
+
+\subsubsection{ストリームデータ}
+ストリームデータは複数の動的に生成される
+チャンクデータから成り立つ。
+本論文では一つのキー(最初のチャンクのハッシュキー)
+から全チャンクデータを探索できるようにする必要がある。
+そのため、チャンクデータをKademlia上に保存する際には、
+そのチャンクデータ(便宜上chunksとする)の次に生成される
+チャンクデータ(便宜上next chunksとする)が生成されるのを待ち、
+chunksとnext chunksのハッシュキーを一つのvalueとして
+にKademlia上に保存し、
+next chunksのハッシュキーを辿ることで、ストリームデータ
+を動的に継続的に取得できるようにしている。
+
+
+\section{Network}
+
+\subsection{MainNet}
+Kademliaをベースとしたネットワークである。
+ここでメタデータのやり取りと、新規参加ノードとSubNetとの橋渡しを行う。
+MainNetにはStore,FindValue,DeleteValueの3つの命令が存在する。
+
+\subsubsection{Store}
+
+StoreはMainNet上にメタデータを保存する命令である。
+
+Storeの型定義を以下に示す。
+\begin{lstlisting}
+	type Store = (meta: Meta) => 
+		Promise<{ url: string, peers: Peer[] }>
+\end{lstlisting}
+
+Storeはメタデータを引数として実行する。
+実行結果としてメタデータが保存されたアドレス(url)と
+メタデータを受け取ったノードらの情報(peers)を返す。
+
+\subsubsection{FindValue}
+
+FindValueはurlに対応するメタデータを探す命令である。
+
+FindValueの型定義を以下に示す。
+\begin{lstlisting}
+	type Store = (url: string) => 
+		Promise<{ meta: Meta, peer: Peer }>
+\end{lstlisting}
+
+FindValueはurl文字列を引数として実行する。
+実行結果としてメタデータ(meta)と、
+そのメタデータを返却してきたノードの情報(peer)を返す。
+
+\subsubsection{DeleteData}
+
+DeleteDataは自身の持つメタデータを削除する命令である。
+
+DeleteDataの型定義を以下に示す。
+\begin{lstlisting}
+	type Store = (url: string) => void		
+\end{lstlisting}
+
+DeleteDataはurl文字列を引数として実行する.
+
+\subsection{SubNet}
+Kademliaをベースとしたネットワークである。
+メタデータの指し示すデータのやり取りを行う。
+構造としては、一つのMainNet上に複数のSubNetが存在することになる。
+
+\subsubsection{FindStaticMetaTarget}
+静的なデータを扱うメタデータの実体データを探索する命令である。
+型定義を以下に示す。
+\begin{lstlisting}
+	type FindStaticMetaTarget = () => Promise<ArrayBuffer | undefined>
+\end{lstlisting}
+
+SubNetの持つメタデータを元に実体データを探索し、
+探索結果を返却する。
+
+\subsubsection{FindStreamMetaTarget}
+StreamMetaの実体データを探索する命令である。
+型定義を以下に示す。
+\begin{lstlisting}
+	type FindStaticMetaTarget = (
+		cb: (res: {
+      			type: "error" | "chunk" | "complete";
+      			chunk?: ArrayBuffer;
+    			}) => void
+		) => void
+\end{lstlisting}
+ストリームデータは長さが不明なので終了を持ち受けるのではなく、
+入手したチャンクを都度コールバックで返却する。
+
+\section{Actor}
+ActorはMainNetとSubNetを利用し、
+LayeredKadのシステムを実現するためのノードの実装である。
+本論文ではSeeder,User,Navigatorの3つのActorが存在する。
+一つのノードは同時に複数のActorになりうる。
+
+\subsection{Seeder}
+任意のデータをもとにメタデータを作成し、
+メタデータをMainNet上にStoreする。
+MainNet上でメタデータをStoreされたノードはNavigatorとなる。
+また、SeederもNavigatorとして振る舞う
+
+\subsection{User}
+UserはメタデータのURLをもとにMainNet上でメタデータを探索し、
+SubNetと接続する。
+メタデータの所有者であるNavigatorを仲介としてSeederと接続する。
+SeederとUserのピアはSubNetというKademliaネットワーク上で管理される。
+SubNetと接続しているUserをObserverと呼ぶ
+
+\subsection{Navigator}
+NavigatorはMainNetとSubNetの橋渡しを行うActorである。
+MainNetを監視しており、Userから命令を受け取ったら、
+Navigatorと接続されたノード(Seederもしくは、Observer)と
+FindValueを行ったUserとの接続を仲介する。
+
+
 
 データを共有する流れを示す。
 
