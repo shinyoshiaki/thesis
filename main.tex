@@ -458,6 +458,7 @@ next chunksのハッシュキーを辿ることで、ストリームデータ
 
 
 \section{Network}
+LayeredKadではネットワークがMainNetとSubNetの2階層存在する。
 
 \subsection{MainNet}
 Kademliaをベースとしたネットワークである。
@@ -542,7 +543,23 @@ LayeredKadのシステムを実現するためのノードの実装である。
 任意のデータをもとにメタデータを作成し、
 メタデータをMainNet上にStoreする。
 MainNet上でメタデータをStoreされたノードはNavigatorとなる。
-また、SeederもNavigatorとして振る舞う
+また、SeederもNavigatorとして振る舞う。
+
+Seederの命令を以下に示す。
+
+\subsubsection{StoreStatic}
+静的なデータをメタデータに変換しMainNetに保存する。
+その後メタデータに対応するSubNetを生成し、
+メタデータの実体データをSubNetに保存する。
+
+型定義を以下に示す。
+\begin{lstlisting}
+	type StoreStatic = (name: string, ab: Buffer) =>
+		Promise<{url: string, meta: Meta}>
+\end{lstlisting}
+
+引数にメタデータの名前となる文字列と、静的なデータを受け取る。
+メタデータのurlとメタデータを返却する。
 
 \subsection{User}
 UserはメタデータのURLをもとにMainNet上でメタデータを探索し、
