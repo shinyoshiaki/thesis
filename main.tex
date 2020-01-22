@@ -540,63 +540,110 @@ LayeredKadのシステムを実現するためのノードの実装である。
 一つのノードは同時に複数のActorになりうる。
 
 \subsection{Seeder}
-任意のデータをもとにメタデータを作成し、
-メタデータをMainNet上にStoreする。
-MainNet上でメタデータをStoreされたノードはNavigatorとなる。
+Seederとはメタデータの実体データを持つノードのことである。
+Seederの中でも特に任意のデータをもとにメタデータを作成し、
+メタデータをMainNet上にStoreし、SubNetを生成するSeederを
+OriginSeederと定義するが、振る舞いは通常のSeederと変わらない。
+SeederによってMainNet上でメタデータをStoreされたノードはNavigatorとなり、
+SubNetへの接続を要求するUserとSeederの橋渡しを担う。
 また、SeederもNavigatorとして振る舞う。
 
-Seederの命令を以下に示す。
+\subsubsection{SubNetの生成}
+OriginSeederはメタデータをMainNetにStoreし、その結果
+メタデータのurlとStore先のノード情報(peers)を得る。
+OriginSeederはメタデータの情報を持ったSubNetを生成する。
+そしてpeersの対象のノードたちをNavigatorにする。
 
-\subsubsection{StoreStatic}
-静的なデータからメタデータを生成しMainNetに保存する。
-その後メタデータに対応するSubNetを生成し、
-メタデータの実体データをSubNetに保存する。
-
-型定義を以下に示す。
-\begin{lstlisting}
+\subsubsection{Seederの命令}
+SeederにはOriginSeeder用の2種類の命令が定義されている。
+\begin{itemize}
+	\item{StoreStatic} \\
+	静的なデータからメタデータを生成しMainNetに保存する。
+	その後メタデータに対応するSubNetを生成し、
+	メタデータの実体データをSubNetに保存する。
+	
+	型定義を以下に示す。
+	\begin{lstlisting}
 	type StoreStatic = (name: string, ab: Buffer) =>
 		Promise<{url: string, meta: Meta}>
-\end{lstlisting}
+	\end{lstlisting}
+	
+	引数にメタデータの名前となる文字列と静的なデータを受け取る。
+	メタデータのurlとメタデータを返却する。
 
-引数にメタデータの名前となる文字列と静的なデータを受け取る。
-メタデータのurlとメタデータを返却する。
+	\item {StoreStream}\\
+	ストリームデータからメタデータを生成しMainNetに保存する。
+	その後メタデータに対応するSubNetを生成し、
+	メタデータの実体データをSubNetに保存する。
 
-\subsubsection{StoreStream}
-ストリームデータからメタデータを生成しMainNetに保存する。
-その後メタデータに対応するSubNetを生成し、
-メタデータの実体データをSubNetに保存する。
-
-型定義を以下に示す。
-\begin{lstlisting}
+	型定義を以下に示す。
+	\begin{lstlisting}
 	type StoreStream = (name: string, first: Buffer,
 		payload:{width:number,heigh:number,cycle:number}
 			) =>
 		Promise<{event:Trigger,url:string}>
-\end{lstlisting}
+	\end{lstlisting}
 
-引数にメタデータの名前となる文字列と
-ストリームデータの最初のチャンクデータと
-ストリームデータの情報を受け取る。
-戻り値のTriggerはfirstチャンク以降のチャンクデータを送るための
-コンポーネントである。urlはメタデータのurlである。
-
+	引数にメタデータの名前となる文字列と
+	ストリームデータの最初のチャンクデータと
+	ストリームデータの情報を受け取る。
+	戻り値のTriggerはfirstチャンク以降のチャンクデータを送るための
+	コンポーネントである。urlはメタデータのurlである。
+\end{itemize}
 
 \subsection{User}
 UserはメタデータのURLをもとにMainNet上でメタデータを探索し、
 メタデータに対応するSubNetと接続する。
 メタデータを持つNavigatorを仲介としてSeederと接続する。
-SeederとUserのピアはSubNetというKademliaネットワーク上で管理される。
-SubNetと接続しているUserをObserverと呼ぶ
+SeederとUserのピアはSubNet上で管理される。
+SubNetと接続しているUserを特にObserverと呼ぶ
+
+\subsubsection{Userの命令}
+Seederには1種類の命令が定義されている。
+\begin{itemize}
+	\item {ConnectSubNet}\\
+	urlを元にMainNet上でメタデータを探索し、メタデータを
+	与えてくれたノードをNavigatorとしてメタデータの実体データを
+	持つ、SeederのSubNetへ接続する。\\
+
+	型定義を以下に示す。
+	\begin{lstlisting}
+	type ConnectSubNet = (url: string) =>
+		Promise<{subNet: SubNet,meta:Meta}>
+	\end{lstlisting}
+
+	メタデータのurlを受け取り、
+	SubNetとメタデータを返却する。		
+\end{itemize}
+
+UserはConnectSubNetによって接続したSubNetに対して
+FindStaticMetaTargetやFindStreamMetaTargetを行うことによって
+メタデータの実体データを探索し入手する。
 
 \subsection{Navigator}
-NavigatorはMainNetとSubNetの橋渡しを行うActorである。
-MainNetを監視しており、Userから命令を受け取ったら、
-Navigatorと接続されたノード(Seederもしくは、Observer)と
-FindValueを行ったUserとの接続を仲介する。
+NavigatorはUserをMainNetとSubNet間の橋渡しを行うActorである。
+MainNetを監視しており、UserからConnectSubNet命令を受け取った時に、
+Navigatorと接続されたSeederとUserの接続を仲介する。
 
+\subsubsection{Seederとの接続}
+LayeredKadのノードはメタデータをStoreされると、Navigatorとなるので、
+すべてのノードが潜在的にNavigatorになるうる。
+そこで、これからNavigatorになるノードのことをNavigatorCandidateと定義する。
+NavigatorCandidateはMainNetを監視しており、
+自らにメタデータをStoreされた時に、Storeしてきたノード(Seeder)に
+対してpeerを生成しコネクションを維持する。
+これによりNavigatorCandidateはNavigatorとなる。
 
+\subsubsection{UserとSeederの接続仲介}
+NavigatorはMainNetを監視し、
+Userが自らの持つメタデータを探索によって発見し、SubNetへの接続要求である。
+ConnectSubNet命令を実行した際に自らの接続するSeederに対してUserとの
+接続を行うための情報を要求する(WebRTCのSDP等)その情報をUserへ返却し、
+次にUserの接続情報(SDP等)をSeederへ渡す。
+これによりUserとSeederの間にpeerが生成され接続が完了する。
+SeederはSubNet環境下に存在するので、
+Userはメタデータに対応するSubNetに接続できたことになる。
 
-データを共有する流れを示す。
 
 \section{実装}
 TypeScriptを用いてNode.jsとChrome上で動作するように実装を行った。
