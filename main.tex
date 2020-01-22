@@ -454,75 +454,80 @@ Kademliaをベースとしたネットワークである。
 ここでメタデータのやり取りと、新規参加ノードとSubNetとの橋渡しを行う。
 
 \subsubsection{MainNetの命令}
-MainNetにはStore,FindValue,DeleteValueの3つの命令が存在する。
+MainNetにはStore,FindValue,DeleteValueの3つの命令が定義されている。
 
-\subsubsection{Store}
-
-StoreはMainNet上にメタデータを保存する命令である。
-
-Storeの型定義を以下に示す。
-\begin{lstlisting}
+\begin{itemize}
+	\item {Store}\\
+	MainNet上にメタデータを保存する命令である。
+	\\\\
+	Storeの型定義を以下に示す。
+	\begin{lstlisting}
 	type Store = (meta: Meta) => 
 		Promise<{ url: string, peers: Peer[] }>
-\end{lstlisting}
+	\end{lstlisting}
 
-Storeはメタデータを引数として実行する。
-実行結果としてメタデータが保存されたアドレス(url)と
-メタデータを受け取ったノードらの情報(peers)を返す。
-
-\subsubsection{FindValue}
-
-FindValueはurlに対応するメタデータを探す命令である。
-
-FindValueの型定義を以下に示す。
-\begin{lstlisting}
+	Storeはメタデータを引数として実行する。
+	実行結果としてメタデータが保存されたアドレス(url)と
+	メタデータを受け取ったノードらの情報(peers)を返す。
+	\\
+	\item {FindValue}\\
+	urlに対応するメタデータを探す命令である。
+	\\\\
+	FindValueの型定義を以下に示す。
+	\begin{lstlisting}
 	type Store = (url: string) => 
 		Promise<{ meta: Meta, peer: Peer }>
-\end{lstlisting}
+	\end{lstlisting}
 
-FindValueはurl文字列を引数として実行する。
-実行結果としてメタデータ(meta)と、
-そのメタデータを返却してきたノードの情報(peer)を返す。
+	FindValueはurl文字列を引数として実行する。
+	実行結果としてメタデータ(meta)と、
+	そのメタデータを返却してきたノードの情報(peer)を返す。
+	\\
+	\item {DeleteData}\\
+	自身の持つメタデータを削除する命令である。
+	\\\\
+	DeleteDataの型定義を以下に示す。
+	\begin{lstlisting}
+	type Store = (url: string) => void
+	\end{lstlisting}
 
-\subsubsection{DeleteData}
-
-DeleteDataは自身の持つメタデータを削除する命令である。
-
-DeleteDataの型定義を以下に示す。
-\begin{lstlisting}
-	type Store = (url: string) => void		
-\end{lstlisting}
-
-DeleteDataはurl文字列を引数として実行する.
+	DeleteDataはurl文字列を引数として実行する.
+\end{itemize}
 
 \subsection{SubNet}
 Kademliaをベースとしたネットワークである。
 メタデータの指し示すデータのやり取りを行う。
 構造としては、一つのMainNet上に複数のSubNetが存在することになる。
 
-\subsubsection{FindStaticMetaTarget}
-静的なデータを扱うメタデータの実体データを探索する命令である。
-型定義を以下に示す。
-\begin{lstlisting}
+\subsubsection{SubNetの命令}
+SubNetにはFindStaticMetaTargetとFindStreamMetaTargetの2種類の
+命令が定義されている。
+\begin{itemize}
+	\item {FindStaticMetaTarget}\\
+	静的なデータを扱うメタデータの実体データを探索する命令である。
+	\\\\
+	型定義を以下に示す。
+	\begin{lstlisting}
 	type FindStaticMetaTarget = () => Promise<ArrayBuffer | undefined>
-\end{lstlisting}
-
-SubNetの持つメタデータを元に実体データを探索し、
-探索結果を返却する。
-
-\subsubsection{FindStreamMetaTarget}
-StreamMetaの実体データを探索する命令である。
-型定義を以下に示す。
-\begin{lstlisting}
+	\end{lstlisting}
+	SubNetの持つメタデータを元に実体データを探索し、
+	探索結果を返却する。
+	\\
+	\item {FindStreamMetaTarget}\\
+	StreamMetaの実体データを探索する命令である。
+	\\\\
+	型定義を以下に示す。
+	\begin{lstlisting}
 	type FindStaticMetaTarget = (
 		cb: (res: {
-      			type: "error" | "chunk" | "complete";
-      			chunk?: ArrayBuffer;
-    			}) => void
+				type: "error" | "chunk" | "complete";
+				chunk?: ArrayBuffer;
+				}) => void
 		) => void
-\end{lstlisting}
-ストリームデータは長さが不明なので終了を持ち受けるのではなく、
-入手したチャンクを都度コールバックで返却する。
+	\end{lstlisting}
+	ストリームデータは長さが不明なので終了を持ち受けるのではなく、
+	入手したチャンクを都度コールバックで返却する。
+\end{itemize}
 
 \section{Actor}
 ActorはMainNetとSubNetを利用し、
