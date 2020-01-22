@@ -548,7 +548,7 @@ MainNet上でメタデータをStoreされたノードはNavigatorとなる。
 Seederの命令を以下に示す。
 
 \subsubsection{StoreStatic}
-静的なデータをメタデータに変換しMainNetに保存する。
+静的なデータからメタデータを生成しMainNetに保存する。
 その後メタデータに対応するSubNetを生成し、
 メタデータの実体データをSubNetに保存する。
 
@@ -558,13 +558,33 @@ Seederの命令を以下に示す。
 		Promise<{url: string, meta: Meta}>
 \end{lstlisting}
 
-引数にメタデータの名前となる文字列と、静的なデータを受け取る。
+引数にメタデータの名前となる文字列と静的なデータを受け取る。
 メタデータのurlとメタデータを返却する。
+
+\subsubsection{StoreStream}
+ストリームデータからメタデータを生成しMainNetに保存する。
+その後メタデータに対応するSubNetを生成し、
+メタデータの実体データをSubNetに保存する。
+
+型定義を以下に示す。
+\begin{lstlisting}
+	type StoreStream = (name: string, first: Buffer,
+		payload:{width:number,heigh:number,cycle:number}
+			) =>
+		Promise<{event:Trigger,url:string}>
+\end{lstlisting}
+
+引数にメタデータの名前となる文字列と
+ストリームデータの最初のチャンクデータと
+ストリームデータの情報を受け取る。
+戻り値のTriggerはfirstチャンク以降のチャンクデータを送るための
+コンポーネントである。urlはメタデータのurlである。
+
 
 \subsection{User}
 UserはメタデータのURLをもとにMainNet上でメタデータを探索し、
-SubNetと接続する。
-メタデータの所有者であるNavigatorを仲介としてSeederと接続する。
+メタデータに対応するSubNetと接続する。
+メタデータを持つNavigatorを仲介としてSeederと接続する。
 SeederとUserのピアはSubNetというKademliaネットワーク上で管理される。
 SubNetと接続しているUserをObserverと呼ぶ
 
