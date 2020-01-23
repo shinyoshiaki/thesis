@@ -478,6 +478,8 @@ GuestNodeとPortalNode、GuestNodeとGuestNodeの
 	http\cite{fielding1999hypertext}で接続を行い、
 	httpを経由してVanilla Iceでシグナリングを行い、
 	WebRTCの通信を開始する。
+	WebRTCのpeerをKademliaのk-bucketsで管理し、
+	Kademliaネットワークを構築する。
 	\\
 	\item {GuestNodeとPortalNode}\\
 	GuestNodeは公開トランスポートアドレスを持たないので、必ず
@@ -485,6 +487,8 @@ GuestNodeとPortalNode、GuestNodeとGuestNodeの
 	GuestNodeはPortalNodeのトランスポートアドレスを知っている前提で
 	httpで接続を行い、httpを経由してVanilla Iceでシグナリングを行い、
 	WebRTCの通信を開始する。
+	WebRTCのpeerをKademliaのk-bucketsで管理し、
+	Kademliaネットワークを構築する。
 	\\
 	\item {GuestNodeとGuestNode}\\
 	GuestNodeは公開トランスポートアドレスを持たないので,GuestNode同士で
@@ -691,10 +695,67 @@ Userはメタデータに対応するSubNetに接続できたことになる。
 \section{動作}
 LayeredKad上で実際にデータを共有するケースの流れについて確認し、
 LayeredKadの動作を確認する。
-\subsection{}
+
+\subsection{webブラウザから静的なデータを共有する}
+\subsubsection{静的データの保存}
 \begin{enumerate}
 	\item 
+	webブラウザはGuestNodeにあたるので、Portalノードの
+	トランスポートアドレスを何らかの方法で入手し、PortalNodeと接続し、
+	MainNetにアクセスする
+	\\
+	\item
+	webブラウザはActorのSeederとしてStoreStatic命令を実行し、
+	メタデータをMainNetに保存し、SubNetを生成し、Navigatorと接続する	
 \end{enumerate}
+\subsubsection{静的データの探索}
+\begin{enumerate}
+	\item 
+	webブラウザはGuestNodeにあたるので、Portalノードの
+	トランスポートアドレスを何らかの方法で入手し、PortalNodeと接続し、
+	MainNetにアクセスする
+	\\
+	\item
+	webブラウザはActorのUserとしてConnectSubNet命令を実行し、
+	Navigatorを経由してSeederのSubNetへ接続する。
+	\\
+	\item 
+	webブラウザはSubNetのFindStaticMetaTarget命令を実行し、
+	SubNet上でメタデータの実体データを探索し、入手する。
+\end{enumerate}
+
+\subsection{webブラウザかストリームデータを共有する}
+\subsubsection{ストリームデータの保存}
+\begin{enumerate}
+	\item 
+	webブラウザはGuestNodeにあたるので、Portalノードの
+	トランスポートアドレスを何らかの方法で入手し、PortalNodeと接続し、
+	MainNetにアクセスする
+	\\
+	\item
+	webブラウザはActorのSeederとしてStoreStream命令を実行し、
+	メタデータをMainNetに保存し、SubNetを生成し、Navigatorと接続する。
+	ストリームのチャンクデータを順次Triggerから送信する。	
+\end{enumerate}
+\subsubsection{ストリームデータの観測}
+\begin{enumerate}
+	\item 
+	webブラウザはGuestNodeにあたるので、Portalノードの
+	トランスポートアドレスを何らかの方法で入手し、PortalNodeと接続し、
+	MainNetにアクセスする
+	\\
+	\item
+	webブラウザはActorのUserとしてConnectSubNet命令を実行し、
+	Navigatorを経由してSeederのSubNetへ接続する。
+	\\
+	\item 
+	webブラウザはSubNetのFindStreamMetaTarget命令を実行し、
+	SubNet上でメタデータのペイロードに記載されている
+	firstチャンクデータの実体データを探索し、入手する。
+	あとはnext chunksの探索を続けることで
+	ストリームデータの観測を行う
+\end{enumerate}
+
 
 \section{実装}
 TypeScriptを用いてNode.jsとChrome上で動作するように実装を行った。
