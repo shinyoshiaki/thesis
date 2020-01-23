@@ -263,7 +263,7 @@ xor距離が近いノードに対し自身のノードIDをkeyとしたFIND\_NOD
 \section{WebRTC}
 本論文では、
 ブラウザとネイティブ環境の両方で動作するP2P通信手法が要求される。
-そこでその要求を満たす、WebRTCをP2P通信部分に使用した。
+そこで,その要求を満たす、WebRTCをP2P通信部分に使用した。
 
 WebRTCとはW3C\footnote{https://www.w3.org/}
 が提唱するリアルタイムコミュニケーション用のAPIの定義で，プラグイ
@@ -456,6 +456,47 @@ LayeredKadではネットワークがMainNetとSubNetの2階層存在する。
 Kademliaをベースとしたネットワークである。
 ここでメタデータのやり取りと、新規参加ノードとSubNetとの橋渡しを行う。
 
+\subsubsection{ノードの種類}
+LayeredKadはウェブブラウザのような公開された
+トランスポートアドレス\footnote{IPアドレスとポートのペア}
+を持たないクライアントデバイスとサーバのような
+公開トランスポートアドレスを持つデバイスの両方で動作することを目的としている。
+ここでは公開トランスポートアドレスを持たないノードをGuestNodeと呼び、
+公開Iトランスポートアドレスを持つノードをPortalNodeと呼ぶ。
+
+\subsubsection{ノードの接続方法}
+LayeredKadのMainNetではノード間は最終的にはWebRTCで通信を行うが、
+WebRTCは通信を開始するためにシグナリングを行う必要がある。
+シグナリングのパターンはPortalNodeとPortalNode、
+GuestNodeとPortalNode、GuestNodeとGuestNodeの
+3パターンを考慮する必要がある。
+
+\begin{itemize}
+	\item {PortalNodeとPortalNode}\\
+	Portalノード間はトランスポートアドレスが公開されているので、
+	相手のノードのトランスポートアドレスを知っている前提で、
+	http\cite{fielding1999hypertext}で接続を行い、
+	httpを経由してVanilla Iceでシグナリングを行い、
+	WebRTCの通信を開始する。
+	\\
+	\item {GuestNodeとPortalNode}\\
+	GuestNodeは公開トランスポートアドレスを持たないので、必ず
+	GuestNodeからPortalNodeへ接続を要求する必要がある。(逆は不可能)
+	GuestNodeはPortalNodeのトランスポートアドレスを知っている前提で
+	httpで接続を行い、httpを経由してVanilla Iceでシグナリングを行い、
+	WebRTCの通信を開始する。
+	\\
+	\item {GuestNodeとGuestNode}\\
+	GuestNodeは公開トランスポートアドレスを持たないので,GuestNode同士で
+	独立して接続を開始することは出来ない。
+	そのため、GuestNode同士が接続されるパターンとして
+	MainNetにWebRTCでの接続を開始
+	(PortalNode + PortalNodeかGuestNode + PortalNodeのパターンで)した後に
+	Kademliaのアルゴリズムに従い、接続されるケースが想定される。
+\end{itemize}
+ノード間の接続完了後はネットワーク全体でWebRTCを用いて共通のプロトコルで
+通信するので、あとはKademliaの仕組みに従う。
+
 \subsubsection{MainNetの命令}
 MainNetにはStore,FindValue,DeleteValueの3つの命令が定義されている。
 
@@ -501,6 +542,10 @@ MainNetにはStore,FindValue,DeleteValueの3つの命令が定義されている
 Kademliaをベースとしたネットワークである。
 メタデータの指し示すデータのやり取りを行う。
 構造としては、一つのMainNet上に複数のSubNetが存在することになる。
+
+\subsubsection{ノードの種類}
+SubNetはMainNet上で動作するのですべての通信にWebRTCを使用している。
+そのためMainNetと違い、ノードの種類は1種類しか無い
 
 \subsubsection{SubNetの命令}
 SubNetにはFindStaticMetaTargetとFindStreamMetaTargetの2種類の
@@ -644,6 +689,12 @@ SeederはSubNet環境下に存在するので、
 Userはメタデータに対応するSubNetに接続できたことになる。
 
 \section{動作}
+LayeredKad上で実際にデータを共有するケースの流れについて確認し、
+LayeredKadの動作を確認する。
+\subsection{}
+\begin{enumerate}
+	\item 
+\end{enumerate}
 
 \section{実装}
 TypeScriptを用いてNode.jsとChrome上で動作するように実装を行った。
