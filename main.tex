@@ -833,9 +833,9 @@ Webのフロントエンド部分はReact\footnote{https://reactjs.org/}
 \chapter{評価実験}
 本論文では,データ通信量と,タスクの処理時間の2つの観点から,
 LayeredKadの評価を行う.
-現実的なユースケースを想定し,
+現実的なユースケースとして、
 幾つかのファイルがネットワーク上に共有され,
-それぞれのファイルに関心があるユーザがそれぞれのグループを形成して
+それぞれのファイルに関心があるユーザがそれぞれのデータ毎にグループを形成し
 共有しあっているケースを想定し仮説を立てる.
 
 \section{データ通信量}
@@ -845,8 +845,11 @@ LayeredKadでは共有するデータごとにネットワークを分割して�
 Kademliaとノード数が同じであれば,ネットワーク全体における,
 データ通信量が少なくなることが予想される.
 ファイル共有サービスにおいてファイル共有速度の最も大きな
-ボトルネックはネットワークの通信速度であるので,
-データ通信量が少ないことはメリットである.
+ボトルネックはネットワークの通信速度であり,
+特にライブストリーミングデータは大容量なデータを高頻度に
+やり取りする必要があるため、
+データ通信量が少ないことは大きなメリットである.
+
 \subsection{実験}
 \subsubsection{実験方法}
 データ通信量の計測を行うために,KademliaとLayeredKadで
@@ -870,6 +873,7 @@ Kademliaとノード数が同じであれば,ネットワーク全体におけ�
 
 本ベンチマークプログラムでは,ノードのペアを1グループとして,
 ファイル共有を行わせる.
+
 ベンチマークプログラムのシナリオのイメージを
 図\ref{fig:trafficBenchmark}に示す
 
@@ -880,10 +884,13 @@ Kademliaとノード数が同じであれば,ネットワーク全体におけ�
 	\label{fig:trafficBenchmark}
 \end{figure}
 
-ノード数を変数パラメータとして,パラメータを増加させて
+ノード数を変数パラメータとして,パラメータの値を増加させ、
 LayeredKadとKademliaのデータ通信回数を記録し,比較を行う.
 
 \subsubsection{実験結果}
+実験結果の表を表\ref{table:traffic-result}に
+グラフを図\ref{figure:traffic-1},\ref{figure:traffic-2},
+\ref{figure:traffic-3}に示す。
 
 \begin{table}[H]
 	\caption{実験結果}	
@@ -914,23 +921,26 @@ LayeredKadとKademliaのデータ通信回数を記録し,比較を行う.
 	\end{tabular}	
 \end{table}
 
-\begin{figure}[H]
+\begin{figure}[H]	
 	\centering
 	\includegraphics[width=10cm]{./assets/image/layered-kad_traffic.png}
-	\caption{layeredKadの通信量}	
+	\caption{layeredKadの通信量}
+	\label{figure:traffic-1}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[H]	
 	\centering
 	\includegraphics[width=10cm]{./assets/image/kad_traffic.png}
-	\caption{kademliaの通信量}	
+	\caption{kademliaの通信量}
+	\label{figure:traffic-2}
 \end{figure}
 
 \begin{figure}[H]
+	
 	\centering
 	\includegraphics[width=10cm]{./assets/image/traffic_graph.png}
 	\caption{通信量の比較}
-	\label{fig:traffic-graph}
+	\label{figure:traffic-3}
 \end{figure}
 
 \subsection{考察}
