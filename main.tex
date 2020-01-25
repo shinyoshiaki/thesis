@@ -889,59 +889,60 @@ LayeredKadとKademliaのデータ通信回数を記録し,比較を行う.
 
 \subsubsection{実験結果}
 実験結果の表を表\ref{table:traffic-result}に
-グラフを図\ref{figure:traffic-1},\ref{figure:traffic-2},
-\ref{figure:traffic-3}に示す。
+グラフを図\ref{figure:traffic-1},\ref{figure:traffic-2},\ref{figure:traffic-3}
+に示す。
 
 \begin{table}[H]
-	\caption{実験結果}	
+	\caption{実験結果}
 	\centering
 	\label{table:traffic-result}
 	\begin{tabular}{|l|l|l|}
 		\hline
-		ノード数     &   
-		Layered Kad(回) &   
+		ノード数     &
+		Layered Kad(回) &
 		Kademlia (回)\\ 
 		\hline
-		10               &   
-		10               &   
+		10               &
+		10               &
 		380\\
 		\hline
-		30               &   
-		16               &   
+		30               &
+		16               &
 		729\\
 		\hline
-		40               &   
-		32               &   
+		40               &
+		32               &
 		1026\\
 		\hline
-		50               &   
-		33               &   
+		50               &
+		33               &
 		1278\\
 		\hline
-	\end{tabular}	
+	\end{tabular}
 \end{table}
 
-\begin{figure}[H]	
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=10cm]{./assets/image/layered-kad_traffic.png}
 	\caption{layeredKadの通信量}
 	\label{figure:traffic-1}
 \end{figure}
 
-\begin{figure}[H]	
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=10cm]{./assets/image/kad_traffic.png}
 	\caption{kademliaの通信量}
 	\label{figure:traffic-2}
 \end{figure}
 
-\begin{figure}[H]
-	
+\begin{figure}[H]	
 	\centering
 	\includegraphics[width=10cm]{./assets/image/traffic_graph.png}
 	\caption{通信量の比較}
 	\label{figure:traffic-3}
 \end{figure}
+
+LayeredKadは
 
 \subsection{考察}
 実験結果は,仮説の通りの結果となった.
