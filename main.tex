@@ -489,7 +489,7 @@ LayeredKadはウェブブラウザのような公開された
 を持たないクライアントデバイスとサーバのような
 公開トランスポートアドレスを持つデバイスの両方で動作することを目的としている.
 ここでは公開トランスポートアドレスを持たないノードをGuestNodeと呼び,
-公開Iトランスポートアドレスを持つノードをPortalNodeと呼ぶ.
+公開トランスポートアドレスを持つノードをPortalNodeと呼ぶ.
 
 \subsubsection{ノードの接続方法}
 LayeredKadのMainNetではノード間は最終的にはWebRTCで通信を行うが,
@@ -498,19 +498,18 @@ WebRTCは通信を開始するためにシグナリングを行う必要があ�
 GuestNodeとPortalNode,GuestNodeとGuestNodeの
 3パターンを考慮する必要がある.
 
-\begin{itemize}
+\begin{enumerate}
 	\item {PortalNodeとPortalNode}\\
 	Portalノード間はトランスポートアドレスが公開されているので,
 	相手のノードのトランスポートアドレスを知っている前提で,
-	http\cite{fielding1999hypertext}で接続を行い,
-	httpを経由してVanilla Iceでシグナリングを行い,
+	httpで接続を行い,httpを経由してVanilla Iceでシグナリングを行い,
 	WebRTCの通信を開始する.
 	WebRTCのpeerをKademliaのk-bucketsで管理し,
 	Kademliaネットワークを構築する.
 	\\
 	\item {GuestNodeとPortalNode}\\
 	GuestNodeは公開トランスポートアドレスを持たないので,必ず
-	GuestNodeからPortalNodeへ接続を要求する必要がある.(逆は不可能)
+	GuestNodeからPortalNodeへ接続を要求する必要がある(逆は不可能).
 	GuestNodeはPortalNodeのトランスポートアドレスを知っている前提で
 	httpで接続を行い,httpを経由してVanilla Iceでシグナリングを行い,
 	WebRTCの通信を開始する.
@@ -518,14 +517,14 @@ GuestNodeとPortalNode,GuestNodeとGuestNodeの
 	Kademliaネットワークを構築する.
 	\\
 	\item {GuestNodeとGuestNode}\\
-	GuestNodeは公開トランスポートアドレスを持たないので,GuestNode同士で
-	独立して接続を開始することは出来ない.
+	GuestNodeは公開トランスポートアドレスを持たないので,
+	GuestNode同士で独立して接続を開始することは出来ない.
 	そのため,GuestNode同士が接続されるパターンとして
-	MainNetにWebRTCでの接続を開始
-	(PortalNode + PortalNodeかGuestNode + PortalNodeのパターンで)した後に
+	MainNetにWebRTCでの接続を開始(1か2のパターンで)した後に
 	Kademliaのアルゴリズムに従い,接続されるケースが想定される.
-\end{itemize}
-ノード間の接続完了後はネットワーク全体でWebRTCを用いて共通のプロトコルで
+\end{enumerate}
+
+ノード間の接続完了後はネットワーク全体で全ノードがWebRTCを用いて共通のプロトコルで
 通信するので,あとはKademliaの仕組みに従う.
 
 \subsubsection{MainNetの命令}
@@ -576,7 +575,7 @@ Kademliaをベースとしたネットワークである.
 
 \subsubsection{ノードの種類}
 SubNetはMainNet上で動作するのですべての通信にWebRTCを使用している.
-そのためMainNetと違い,ノードの種類は1種類しか無い
+そのためMainNetと違い,通信方法によるノードの分類は存在しない。
 
 \subsubsection{SubNetの命令}
 SubNetにはFindStaticMetaTargetとFindStreamMetaTargetの2種類の
@@ -604,6 +603,10 @@ SubNetにはFindStaticMetaTargetとFindStreamMetaTargetの2種類の
 				}) => void
 		) => void
 	\end{lstlisting}
+	SubNetの持つメタデータを元にストリームデータをサブスクライブする。
+	チャンクデータのアノテーションから
+	次にFindValueすべきkeyを入手している。
+	
 	ストリームデータは長さが不明なので終了を持ち受けるのではなく,
 	入手したチャンクを都度コールバックで返却する.
 \end{itemize}
