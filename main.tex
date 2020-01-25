@@ -392,6 +392,9 @@ MainNetとSubNetの関係を図\ref{fig:image}
 	\label{fig:image}
 \end{figure}
 
+LayeredKadにおける幾つかの用語はBitTorrentのRFC\cite{bep0000r38:online}
+の影響を受けている.
+
 \section{Kademliaの拡張}
 KademliaのStoreは単にvalueとkey(valueのハッシュ値)のペアしか情報を
 持たない。
@@ -614,17 +617,62 @@ SubNetにはFindStaticMetaTargetとFindStreamMetaTargetの2種類の
 \section{Actor}
 ActorはMainNetとSubNetを利用し,
 LayeredKadのシステムを実現するためのノードの実装である.
-本論文ではSeeder,User,Navigatorの3つのActorが存在する.
+本論文ではUser,Seeder,Navigatorの3つのActorが存在する.
 一つのノードは同時に複数のActorになりうる.
 
+\subsection{User}
+UserはメタデータのURLをもとにMainNet上でメタデータを探索し,
+メタデータに対応するSubNetと接続する.
+メタデータを持つNavigatorを仲介としてSeederと接続する.
+SeederとUserのピアはSubNet上で管理される.
+
+SubNetと接続しているUserを特にObserveUserと呼ぶ。
+また、ObserveUserはSeederの役割を兼ねる。
+
+\subsubsection{SubNetへの接続}
+SubNetへの接続手順を示す。
+\begin{enumerate}
+	\item メタデータのURLをもとにMainNetでメタデータを探索する
+	\item メタデータを返却したノード(Navigator)にSeederへの接続仲介を要請する
+	\item Seederとの接続完了はSubNetへ接続できたことを意味する
+	\item 
+	ObserveUserはSeederのインスタンスを生成し、接続しているSubNet
+	におけるSeederを兼任する
+	\item SeederはNavigatorを兼任するため、Navigatorのインスタンスを生成する
+\end{enumerate}
+
+\subsubsection{Userの命令}
+Userには1種類の命令が定義されている.
+\begin{itemize}
+	\item {ConnectSubNet}\\
+	      urlを元にMainNet上でメタデータを探索し,メタデータを
+	      与えてくれたノードをNavigatorとしてメタデータの実体データを
+	      持つ,SeederのSubNetへ接続する.\\
+	      	      
+	      型定義を以下に示す.
+	      \begin{lstlisting}
+	type ConnectSubNet = (url: string) =>
+		Promise<{subNet: SubNet,meta:Meta}>
+	      \end{lstlisting}
+	      	      
+	      メタデータのurlを受け取り,
+	      SubNetとメタデータを返却する.		
+\end{itemize}
+
+UserはConnectSubNetによって接続したSubNetに対して
+FindStaticMetaTargetやFindStreamMetaTargetを行うことによって
+メタデータの実体データを探索し入手する.
+
 \subsection{Seeder}
-Seederとはメタデータの実体データを持つノードのことである.
-Seederの中でも特に任意のデータをもとにメタデータを作成し,
-メタデータをMainNet上にStoreし,SubNetを生成するSeederを
-OriginSeederと定義するが,振る舞いは通常のSeederと変わらない.
+Seederとはデータの配信を行うノードである。
+実際のユースケースでいうところのデータのアップロード者にあたる。
+Seederは任意のデータをもとにメタデータを作成し,
+メタデータをMainNet上にStoreし,SubNetを生成する。
+
 SeederによってMainNet上でメタデータをStoreされたノードはNavigatorとなり,
 SubNetへの接続を要求するUserとSeederの橋渡しを担う.
 また,SeederもNavigatorとして振る舞う.
+
 
 \subsubsection{SubNetの生成}
 OriginSeederはメタデータをMainNetにStoreし,その結果
@@ -668,35 +716,6 @@ SeederにはOriginSeeder用の2種類の命令が定義されている.
 	      戻り値のTriggerはfirstチャンク以降のチャンクデータを送るための
 	      コンポーネントである.urlはメタデータのurlである.
 \end{itemize}
-
-\subsection{User}
-UserはメタデータのURLをもとにMainNet上でメタデータを探索し,
-メタデータに対応するSubNetと接続する.
-メタデータを持つNavigatorを仲介としてSeederと接続する.
-SeederとUserのピアはSubNet上で管理される.
-SubNetと接続しているUserを特にObserverと呼ぶ
-
-\subsubsection{Userの命令}
-Seederには1種類の命令が定義されている.
-\begin{itemize}
-	\item {ConnectSubNet}\\
-	      urlを元にMainNet上でメタデータを探索し,メタデータを
-	      与えてくれたノードをNavigatorとしてメタデータの実体データを
-	      持つ,SeederのSubNetへ接続する.\\
-	      	      
-	      型定義を以下に示す.
-	      \begin{lstlisting}
-	type ConnectSubNet = (url: string) =>
-		Promise<{subNet: SubNet,meta:Meta}>
-	      \end{lstlisting}
-	      	      
-	      メタデータのurlを受け取り,
-	      SubNetとメタデータを返却する.		
-\end{itemize}
-
-UserはConnectSubNetによって接続したSubNetに対して
-FindStaticMetaTargetやFindStreamMetaTargetを行うことによって
-メタデータの実体データを探索し入手する.
 
 \subsection{Navigator}
 NavigatorはUserをMainNetとSubNet間の橋渡しを行うActorである.
