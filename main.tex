@@ -888,50 +888,54 @@ Kademliaとノード数が同じであれば,ネットワーク全体におけ�
 LayeredKadとKademliaのデータ通信回数を記録し,比較を行う.
 
 \subsubsection{実験結果}
-実験結果の表を表\ref{table:traffic-result}に
-グラフを図\ref{figure:traffic-1},\ref{figure:traffic-2},\ref{figure:traffic-3}
-に示す。
+KademliaとLayeredKadの実験結果の表を表\ref{table:traffic-result}に
+
+Kademliaの実験結果のグラフを図\ref{figure:traffic-1}に,
+
+LayeredKadの実験結果のグラフを図\ref{figure:traffic-2}に,
+
+KademliaとLayeredKadの実験結果のグラフを\ref{figure:traffic-3}に示す。
 
 \begin{table}[H]
-	\caption{実験結果}
+	\caption{KademliaとLayeredKadの実験結果}
 	\centering
 	\label{table:traffic-result}
 	\begin{tabular}{|l|l|l|}
 		\hline
 		ノード数     &
-		Layered Kad(回) &
-		Kademlia (回)\\ 
+		Kademlia (回) &
+		LayeredKad (回)\\
 		\hline
 		10               &
-		10               &
-		380\\
+		380               &
+		10\\
 		\hline
 		30               &
-		16               &
-		729\\
+		729               &
+		16\\
 		\hline
 		40               &
-		32               &
-		1026\\
+		1026               &
+		32\\
 		\hline
 		50               &
-		33               &
-		1278\\
+		1278               &
+		33\\
 		\hline
 	\end{tabular}
 \end{table}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=10cm]{./assets/image/layered-kad_traffic.png}
-	\caption{layeredKadの通信量}
+	\includegraphics[width=10cm]{./assets/image/kad_traffic.png}
+	\caption{kademliaの通信量}
 	\label{figure:traffic-1}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=10cm]{./assets/image/kad_traffic.png}
-	\caption{kademliaの通信量}
+	\includegraphics[width=10cm]{./assets/image/layered-kad_traffic.png}
+	\caption{layeredKadの通信量}
 	\label{figure:traffic-2}
 \end{figure}
 
@@ -953,12 +957,14 @@ LayeredKadが共有するデータ毎に別のネットワークを構築する�
 \section{タスクの処理時間}
 \subsection{仮説}
 LayeredKadはKademliaをさらに構造化したシステムであるため,
-単純に一つのファイルを共有するようなケースでは,
-当然,Kademliaの方が高速である.
-しかし,今回のケースではKademliaはすべてのファイルについての
-処理においてもネットワーク全体で処理を行う必要があるのに対して,
-LayeredKadではユーザグループ（SubNet）内で完結するため,
-処理効率がよく,タスクの処理時間も短くなると考えられる.
+単純に一つのデータをネットワーク全体で共有するようなケースでは,
+処理のステップ数の少ないKademliaの方が高速であると予想される.
+しかし今回の実験ケースでは複数のデータを複数のユーザグループ毎に
+共有しているので、Kademliaはすべてのデータにおける
+処理をネットワーク全体で行う必要があるのに対して,
+LayeredKadではユーザグループ(SubNet)内で完結するため,
+処理効率がよくタスクの処理時間も短くなると考えられる.
+
 \subsection{実験}
 \subsubsection{実験方法}
 タスク処理時間の計測を行うために,KademliaとLayeredKadで
@@ -987,33 +993,36 @@ LayeredKadではユーザグループ（SubNet）内で完結するため,
 共有するデータ数のチャンキング数を変数として実験を行う.
 
 \subsubsection{実験結果}
+KademliaとLayeredKadの実験結果を表\ref{table:calc-result}と
+図\ref{fig:calc_compare.png}に示す。
+
 \begin{table}[H]
-	\caption{実験結果}	
+	\caption{実験結果}
 	\centering
 	\label{table:calc-result}
 	\begin{tabular}{|l|l|l|}
 		\hline
-		チャンク数 &   
-		Layered Kad (s) &   
-		Kademlia (s)\\ 
+ 		 チャンク数 &
+		 Kademlia (s) &
+		 Layered Kad (s)\\ 
 		\hline
-		1               &   
-		2.098           &   
-		0.636\\
+		1               &
+		0.636           &
+		2.098\\
 		\hline
-		4               &   
-		2.728           &   
-		2.032\\
+		4               &
+		2.032           &
+		2.728\\
 		\hline
-		5               &   
-		2.469           &   
-		2.435\\
+		5               &
+		2.435           &
+		2.469\\
 		\hline
-		6               &   
-		2.581           &   
-		2.679\\
+		6               &
+		2.679(7.679)           &
+		2.581\\
 		\hline
-	\end{tabular}	
+	\end{tabular}
 \end{table}
 
 \begin{figure}[H]
