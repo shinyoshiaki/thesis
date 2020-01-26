@@ -184,9 +184,9 @@ Kademliaは高いChurn耐性を持ちながら,実装も容易であるため,
 	\end{tabular}\\ \hline
 	IPFS     &
 	\begin{tabular}{l}
-		IPFSとは複数のノードが協調して一つの大きなストレージ\\
+		IPFSとは複数のノードが協調して一つの大きなストレージ                       \\
 		またはHTTPの置き換えとして機能することを目的としているシステムある. \\
-		IPFSはKademliaをベースとして開発されている\\
+		IPFSはKademliaをベースとして開発されている                                          \\
 	\end{tabular}\\ \hline
 	\end{tabular}
 \end{table}
@@ -503,28 +503,28 @@ GuestNodeとPortalNode,GuestNodeとGuestNodeの
 
 \begin{enumerate}
 	\item {PortalNodeとPortalNode}\\
-	Portalノード間はトランスポートアドレスが公開されているので,
-	相手のノードのトランスポートアドレスを知っている前提で,
-	httpで接続を行い,httpを経由してVanilla Iceでシグナリングを行い,
-	WebRTCの通信を開始する.
-	WebRTCのpeerをKademliaのk-bucketsで管理し,
-	Kademliaネットワークを構築する.
-	\\
+	      Portalノード間はトランスポートアドレスが公開されているので,
+	      相手のノードのトランスポートアドレスを知っている前提で,
+	      httpで接続を行い,httpを経由してVanilla Iceでシグナリングを行い,
+	      WebRTCの通信を開始する.
+	      WebRTCのpeerをKademliaのk-bucketsで管理し,
+	      Kademliaネットワークを構築する.
+	      \\
 	\item {GuestNodeとPortalNode}\\
-	GuestNodeは公開トランスポートアドレスを持たないので,必ず
-	GuestNodeからPortalNodeへ接続を要求する必要がある(逆は不可能).
-	GuestNodeはPortalNodeのトランスポートアドレスを知っている前提で
-	httpで接続を行い,httpを経由してVanilla Iceでシグナリングを行い,
-	WebRTCの通信を開始する.
-	WebRTCのpeerをKademliaのk-bucketsで管理し,
-	Kademliaネットワークを構築する.
-	\\
+	      GuestNodeは公開トランスポートアドレスを持たないので,必ず
+	      GuestNodeからPortalNodeへ接続を要求する必要がある(逆は不可能).
+	      GuestNodeはPortalNodeのトランスポートアドレスを知っている前提で
+	      httpで接続を行い,httpを経由してVanilla Iceでシグナリングを行い,
+	      WebRTCの通信を開始する.
+	      WebRTCのpeerをKademliaのk-bucketsで管理し,
+	      Kademliaネットワークを構築する.
+	      \\
 	\item {GuestNodeとGuestNode}\\
-	GuestNodeは公開トランスポートアドレスを持たないので,
-	GuestNode同士で独立して接続を開始することは出来ない.
-	そのため,GuestNode同士が接続されるパターンとして
-	MainNetにWebRTCでの接続を開始(1か2のパターンで)した後に
-	Kademliaのアルゴリズムに従い,接続されるケースが想定される.
+	      GuestNodeは公開トランスポートアドレスを持たないので,
+	      GuestNode同士で独立して接続を開始することは出来ない.
+	      そのため,GuestNode同士が接続されるパターンとして
+	      MainNetにWebRTCでの接続を開始(1か2のパターンで)した後に
+	      Kademliaのアルゴリズムに従い,接続されるケースが想定される.
 \end{enumerate}
 
 ノード間の接続完了後はネットワーク全体で全ノードがWebRTCを用いて共通のプロトコルで
@@ -535,40 +535,40 @@ MainNetにはStore,FindValue,DeleteValueの3つの命令が定義されている
 
 \begin{itemize}
 	\item {Store}\\
-	MainNet上にメタデータを保存する命令である.
-	\\\\
-	Storeの型定義を以下に示す.
-	\begin{lstlisting}
+	      MainNet上にメタデータを保存する命令である.
+	      \\\\
+	      Storeの型定義を以下に示す.
+	      \begin{lstlisting}
 	type Store = (meta: Meta) => 
 		Promise<{ url: string, peers: Peer[] }>
-	\end{lstlisting}
-
-	Storeはメタデータを引数として実行する.
-	実行結果としてメタデータが保存されたアドレス(url)と
-	メタデータを受け取ったノードらの情報(peers)を返す.
-	\\
+	      \end{lstlisting}
+	      	      
+	      Storeはメタデータを引数として実行する.
+	      実行結果としてメタデータが保存されたアドレス(url)と
+	      メタデータを受け取ったノードらの情報(peers)を返す.
+	      \\
 	\item {FindValue}\\
-	urlに対応するメタデータを探す命令である.
-	\\\\
-	FindValueの型定義を以下に示す.
-	\begin{lstlisting}
+	      urlに対応するメタデータを探す命令である.
+	      \\\\
+	      FindValueの型定義を以下に示す.
+	      \begin{lstlisting}
 	type Store = (url: string) => 
 		Promise<{ meta: Meta, peer: Peer }>
-	\end{lstlisting}
-
-	FindValueはurl文字列を引数として実行する.
-	実行結果としてメタデータ(meta)と,
-	そのメタデータを返却してきたノードの情報(peer)を返す.
-	\\
+	      \end{lstlisting}
+	      	      
+	      FindValueはurl文字列を引数として実行する.
+	      実行結果としてメタデータ(meta)と,
+	      そのメタデータを返却してきたノードの情報(peer)を返す.
+	      \\
 	\item {DeleteData}\\
-	自身の持つメタデータを削除する命令である.
-	\\\\
-	DeleteDataの型定義を以下に示す.
-	\begin{lstlisting}
+	      自身の持つメタデータを削除する命令である.
+	      \\\\
+	      DeleteDataの型定義を以下に示す.
+	      \begin{lstlisting}
 	type Store = (url: string) => void
-	\end{lstlisting}
-
-	DeleteDataはurl文字列を引数として実行する.
+	      \end{lstlisting}
+	      	      
+	      DeleteDataはurl文字列を引数として実行する.
 \end{itemize}
 
 \subsection{SubNet}
@@ -585,33 +585,33 @@ SubNetにはFindStaticMetaTargetとFindStreamMetaTargetの2種類の
 命令が定義されている.
 \begin{itemize}
 	\item {FindStaticMetaTarget}\\
-	静的なデータを扱うメタデータの実体データを探索する命令である.
-	\\\\
-	型定義を以下に示す.
-	\begin{lstlisting}
+	      静的なデータを扱うメタデータの実体データを探索する命令である.
+	      \\\\
+	      型定義を以下に示す.
+	      \begin{lstlisting}
 	type FindStaticMetaTarget = () => Promise<ArrayBuffer | undefined>
-	\end{lstlisting}
-	SubNetの持つメタデータを元に実体データを探索し,
-	探索結果を返却する.
-	\\
+	      \end{lstlisting}
+	      SubNetの持つメタデータを元に実体データを探索し,
+	      探索結果を返却する.
+	      \\
 	\item {FindStreamMetaTarget}\\
-	StreamMetaの実体データを探索する命令である.
-	\\\\
-	型定義を以下に示す.
-	\begin{lstlisting}
+	      StreamMetaの実体データを探索する命令である.
+	      \\\\
+	      型定義を以下に示す.
+	      \begin{lstlisting}
 	type FindStaticMetaTarget = (
 		cb: (res: {
 				type: "error" | "chunk" | "complete";
 				chunk?: ArrayBuffer;
 				}) => void
 		) => void
-	\end{lstlisting}
-	SubNetの持つメタデータを元にストリームデータをサブスクライブする。
-	チャンクデータのアノテーションから
-	次にFindValueすべきkeyを入手している。
-	
-	ストリームデータは長さが不明なので終了を持ち受けるのではなく,
-	入手したチャンクを都度コールバックで返却する.
+	      \end{lstlisting}
+	      SubNetの持つメタデータを元にストリームデータをサブスクライブする。
+	      チャンクデータのアノテーションから
+	      次にFindValueすべきkeyを入手している。
+	      	      	
+	      ストリームデータは長さが不明なので終了を持ち受けるのではなく,
+	      入手したチャンクを都度コールバックで返却する.
 \end{itemize}
 
 \section{Actor}
@@ -636,8 +636,8 @@ SubNetへの接続手順を示す。
 	\item メタデータを返却したノード(Navigator)にSeederへの接続仲介を要請する
 	\item Seederとの接続完了はSubNetへ接続できたことを意味する
 	\item 
-	ObserveUserはSeederのインスタンスを生成し、接続しているSubNet
-	におけるSeederを兼任する
+	      ObserveUserはSeederのインスタンスを生成し、接続しているSubNet
+	      におけるSeederを兼任する
 	\item SeederはNavigatorを兼任するため、Navigatorのインスタンスを生成する
 \end{enumerate}
 
@@ -648,13 +648,13 @@ Userには1種類の命令が定義されている.
 	      urlを元にMainNet上でメタデータを探索し,メタデータを
 	      与えてくれたノードをNavigatorとしてメタデータの実体データを
 	      持つ,SeederのSubNetへ接続する.\\
-	      	      
+	      	      	      	      
 	      型定義を以下に示す.
 	      \begin{lstlisting}
 	type ConnectSubNet = (url: string) =>
 		Promise<{subNet: SubNet,meta:Meta}>
 	      \end{lstlisting}
-	      	      
+	      	      	      	      
 	      メタデータのurlを受け取り,
 	      SubNetとメタデータを返却する.		
 \end{itemize}
@@ -687,21 +687,21 @@ SeederにはOriginSeeder用の2種類の命令が定義されている.
 	静的なデータからメタデータを生成しMainNetに保存する.
 	その後メタデータに対応するSubNetを生成し,
 	メタデータの実体データをSubNetに保存する.
-			
+					
 	型定義を以下に示す.
 	\begin{lstlisting}
 	type StoreStatic = (name: string, ab: Buffer) =>
 		Promise<{url: string, meta: Meta}>
 	\end{lstlisting}
-			
+					
 	引数にメタデータの名前となる文字列と静的なデータを受け取る.
 	メタデータのurlとメタデータを返却する.
-		
+				
 	\item {StoreStream}\\
 	      ストリームデータからメタデータを生成しMainNetに保存する.
 	      その後メタデータに対応するSubNetを生成し,
 	      メタデータの実体データをSubNetに保存する.
-	      	      
+	      	      	      	      
 	      型定義を以下に示す.
 	      \begin{lstlisting}
 	type StoreStream = (name: string, first: Buffer,
@@ -709,7 +709,7 @@ SeederにはOriginSeeder用の2種類の命令が定義されている.
 			) =>
 		Promise<{event:Trigger,url:string}>
 	      \end{lstlisting}
-	      	      
+	      	      	      	      
 	      引数にメタデータの名前となる文字列と
 	      ストリームデータの最初のチャンクデータと
 	      ストリームデータの情報を受け取る.
@@ -749,60 +749,60 @@ LayeredKadの動作を確認する.
 \subsubsection{静的データの保存}
 \begin{enumerate}
 	\item 
-	webブラウザはGuestNodeにあたるので,Portalノードの
-	トランスポートアドレスを何らかの方法で入手し,PortalNodeと接続し,
-	MainNetにアクセスする
-	\\
+	      webブラウザはGuestNodeにあたるので,Portalノードの
+	      トランスポートアドレスを何らかの方法で入手し,PortalNodeと接続し,
+	      MainNetにアクセスする
+	      \\
 	\item
-	webブラウザはActorのSeederとしてStoreStatic命令を実行し,
-	メタデータをMainNetに保存し,SubNetを生成し,Navigatorと接続する	
+	      webブラウザはActorのSeederとしてStoreStatic命令を実行し,
+	      メタデータをMainNetに保存し,SubNetを生成し,Navigatorと接続する	
 \end{enumerate}
 \subsubsection{静的データの探索}
 \begin{enumerate}
 	\item 
-	webブラウザはGuestNodeにあたるので,Portalノードの
-	トランスポートアドレスを何らかの方法で入手し,PortalNodeと接続し,
-	MainNetにアクセスする
-	\\
+	      webブラウザはGuestNodeにあたるので,Portalノードの
+	      トランスポートアドレスを何らかの方法で入手し,PortalNodeと接続し,
+	      MainNetにアクセスする
+	      \\
 	\item
-	webブラウザはActorのUserとしてConnectSubNet命令を実行し,
-	Navigatorを経由してSeederのSubNetへ接続する.
-	\\
+	      webブラウザはActorのUserとしてConnectSubNet命令を実行し,
+	      Navigatorを経由してSeederのSubNetへ接続する.
+	      \\
 	\item 
-	webブラウザはSubNetのFindStaticMetaTarget命令を実行し,
-	SubNet上でメタデータの実体データを探索し,入手する.
+	      webブラウザはSubNetのFindStaticMetaTarget命令を実行し,
+	      SubNet上でメタデータの実体データを探索し,入手する.
 \end{enumerate}
 
 \subsection{webブラウザかストリームデータを共有する}
 \subsubsection{ストリームデータの保存}
 \begin{enumerate}
 	\item 
-	webブラウザはGuestNodeにあたるので,Portalノードの
-	トランスポートアドレスを何らかの方法で入手し,PortalNodeと接続し,
-	MainNetにアクセスする
-	\\
+	      webブラウザはGuestNodeにあたるので,Portalノードの
+	      トランスポートアドレスを何らかの方法で入手し,PortalNodeと接続し,
+	      MainNetにアクセスする
+	      \\
 	\item
-	webブラウザはActorのSeederとしてStoreStream命令を実行し,
-	メタデータをMainNetに保存し,SubNetを生成し,Navigatorと接続する.
-	ストリームのチャンクデータを順次Triggerから送信する.	
+	      webブラウザはActorのSeederとしてStoreStream命令を実行し,
+	      メタデータをMainNetに保存し,SubNetを生成し,Navigatorと接続する.
+	      ストリームのチャンクデータを順次Triggerから送信する.	
 \end{enumerate}
 \subsubsection{ストリームデータの観測}
 \begin{enumerate}
 	\item 
-	webブラウザはGuestNodeにあたるので,Portalノードの
-	トランスポートアドレスを何らかの方法で入手し,PortalNodeと接続し,
-	MainNetにアクセスする
-	\\
+	      webブラウザはGuestNodeにあたるので,Portalノードの
+	      トランスポートアドレスを何らかの方法で入手し,PortalNodeと接続し,
+	      MainNetにアクセスする
+	      \\
 	\item
-	webブラウザはActorのUserとしてConnectSubNet命令を実行し,
-	Navigatorを経由してSeederのSubNetへ接続する.
-	\\
+	      webブラウザはActorのUserとしてConnectSubNet命令を実行し,
+	      Navigatorを経由してSeederのSubNetへ接続する.
+	      \\
 	\item 
-	webブラウザはSubNetのFindStreamMetaTarget命令を実行し,
-	SubNet上でメタデータのペイロードに記載されている
-	firstチャンクデータの実体データを探索し,入手する.
-	あとはnext chunksの探索を続けることで
-	ストリームデータの観測を行う
+	      webブラウザはSubNetのFindStreamMetaTarget命令を実行し,
+	      SubNet上でメタデータのペイロードに記載されている
+	      firstチャンクデータの実体データを探索し,入手する.
+	      あとはnext chunksの探索を続けることで
+	      ストリームデータの観測を行う
 \end{enumerate}
 
 
@@ -902,25 +902,33 @@ KademliaとLayeredKadの実験結果のグラフを\ref{figure:traffic-3}に示�
 	\label{table:traffic-result}
 	\begin{tabular}{|l|l|l|}
 		\hline
-		ノード数     &
-		Kademlia (回) &
+		ノード数   &   
+		Kademlia (回) &   
 		LayeredKad (回)\\
 		\hline
-		10               &
-		380               &
+		10             &   
+		90             &   
+		5\\
+		\hline
+		20             &   
+		380            &   
 		10\\
 		\hline
-		30               &
-		729               &
+		30             &   
+		600            &   
 		16\\
 		\hline
-		40               &
-		1026               &
-		32\\
+		40             &   
+		779            &   
+		26\\
 		\hline
-		50               &
-		1278               &
-		33\\
+		50             &   
+		965            &   
+		36\\
+		\hline
+		60             &   
+		1132           &   
+		48\\
 		\hline
 	\end{tabular}
 \end{table}
@@ -946,13 +954,23 @@ KademliaとLayeredKadの実験結果のグラフを\ref{figure:traffic-3}に示�
 	\label{figure:traffic-3}
 \end{figure}
 
-LayeredKadは
+ノード数がいずれの場合においても、データ通信回数はLayeredKadがKademlia
+を大きく下回った。
+
+LayeredKadもKademliaもノード数の増加に対してデータ通信回数は単調増加
+しているが、LayeredKadの方が増加ペースがやや緩やかである。
 
 \subsection{考察}
 実験結果は,仮説の通りの結果となった.
-ただし,この結果はベンチマークのシナリオが
-LayeredKadが共有するデータ毎に別のネットワークを構築するという性質に
-有利な設定であるため,これほどの性能差が出たと考えられる.
+Kademliaは一つのデータを保存する際に、
+最大でk-bucketのサイズ分(本論文では20)のノードとデータのやり取りを
+することになるため、この実験結果のような通信回数になったと考えられる。
+
+一方LayeredKadはデータ毎にSubNetを生成し、その内部でデータの
+やり取りを行うため、本実験の場合データをノードのペアがやり取りを行う
+シナリオとなっているためSubNetにはノードが2つしか無く、
+データのやり取りは1回で済む。
+そのため、この実験結果のような通信回数になったと考えられる。
 
 \section{タスクの処理時間}
 \subsection{仮説}
@@ -1002,24 +1020,24 @@ KademliaとLayeredKadの実験結果を表\ref{table:calc-result}と
 	\label{table:calc-result}
 	\begin{tabular}{|l|l|l|}
 		\hline
- 		 チャンク数 &
-		 Kademlia (s) &
-		 Layered Kad (s)\\ 
+		チャンク数 &   
+		Kademlia (s)    &   
+		Layered Kad (s)\\ 
 		\hline
-		1               &
-		0.636           &
+		1               &   
+		0.636           &   
 		2.098\\
 		\hline
-		4               &
-		2.032           &
+		4               &   
+		2.032           &   
 		2.728\\
 		\hline
-		5               &
-		2.435           &
+		5               &   
+		2.435           &   
 		2.469\\
 		\hline
-		6               &
-		2.679(7.679)           &
+		6               &   
+		2.679(7.679)    &   
 		2.581\\
 		\hline
 	\end{tabular}
