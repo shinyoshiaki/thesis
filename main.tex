@@ -228,7 +228,7 @@ Kademliaには４種類の通信問い合わせがある.名称と内容につ�
 	\item {FIND\_NODE}\\
 	      自身のk-bucketsのうち最もkeyにxor距離の近いノードに
 	      自身のノードIDと距離が近い上位K個のノードの情報を送らせる.\\	      
-	\item {FIND\_VALU}\\
+	\item {FIND\_VALUE}\\
 	      自身のk-bucketsのうち最もkeyにxor距離の近いノードに
 	      keyと対応するvalueを持っているか問い合わせる.
 	      持っている場合はそのvalueを,
@@ -380,8 +380,7 @@ FindNodeを繰り返し実行し、k-tableを最適化する。
 
 本手法では,共有するデータの情報をメタデータとして,
 Kademliaネットワーク上で共有する.
-このメタデータを共有するネットワークを
-MainNetと定義する.
+このメタデータを共有するネットワークをMainNetと定義する.
 MainNet上でメタデータの実体データの共有を目的とするユーザ同士で
 さらに別のKademliaネットワークを構築し,メタデータの情報に従い
 メタデータに対応する実体データの共有を行う.
@@ -406,7 +405,17 @@ KademliaのStoreは単にvalueとkey(valueのハッシュ値)のペアしか情�
 関係性を表すためにはvalueとkeyだけでは情報が不足する。
 そのためLayeredKadのKademliaではvalueとkeyのペアに対し
 任意の文字列をアノテーションすることを許可する拡張を行う。
-このアノテーションは現状ストリームデータの共有にのみ用いられる
+このアノテーションは現状ストリームデータの共有にのみ用いられる.
+\\\\
+拡張されたStoreの型定義を示す.
+\begin{lstlisting}
+	type Store = 
+		(key: string, value: any, msg?: string) => void
+\end{lstlisting}
+keyはvalueのsha1ハッシュ値である必要があるが、
+msgがアノテーションであり、任意の文字列を取る。
+
+\newpage
 
 \section{メタデータ}
 LayeredKadでは静的,動的の両方のデータ形式の
@@ -426,7 +435,7 @@ type Meta = {
 typeはメタデータの種類を表す.
 本論文ではstaticとstreamの二種類が存在する.
 
-nameはメタデータの名前である.nameには任意の文字列を与える.
+nameはメタデータの名前である. nameには任意の文字列を与える.
 
 payloadには実体データに関する情報を与える.
 
@@ -499,17 +508,17 @@ LayeredKadはウェブブラウザのような公開された
 公開トランスポートアドレスを持つノードをPortalNodeと呼ぶ.
 
 \subsubsection{ノードの接続方法}
-LayeredKadのMainNetではノード間は最終的にはWebRTCで通信を行うが,
+LayeredKadのMainNetのノード間では最終的にWebRTCで通信を行うが,
 WebRTCは通信を開始するためにシグナリングを行う必要がある.
 シグナリングのパターンはPortalNodeとPortalNode,
 GuestNodeとPortalNode,GuestNodeとGuestNodeの
 3パターンを考慮する必要がある.
 
-\begin{enumerate}
+\begin{itemize}
 	\item {PortalNodeとPortalNode}\\
 	      Portalノード間はトランスポートアドレスが公開されているので,
 	      相手のノードのトランスポートアドレスを知っている前提で,
-	      httpで接続を行い,httpを経由してVanilla Iceでシグナリングを行い,
+	      httpで接続を行い, httpを経由してVanilla Iceでシグナリングを行い,
 	      WebRTCの通信を開始する.
 	      WebRTCのpeerをKademliaのk-bucketsで管理し,
 	      Kademliaネットワークを構築する.
@@ -529,7 +538,7 @@ GuestNodeとPortalNode,GuestNodeとGuestNodeの
 	      そのため,GuestNode同士が接続されるパターンとして
 	      MainNetにWebRTCでの接続を開始(1か2のパターンで)した後に
 	      Kademliaのアルゴリズムに従い,接続されるケースが想定される.
-\end{enumerate}
+\end{itemize}
 
 ノード間の接続完了後はネットワーク全体で全ノードがWebRTCを用いて共通のプロトコルで
 通信するので,あとはKademliaの仕組みに従う.
@@ -562,7 +571,7 @@ MainNetにはStore,FindValue,DeleteValueの3つの命令が定義されている
 	      	      
 	      FindValueはurl文字列を引数として実行する.
 	      実行結果としてメタデータ(meta)と,
-	      そのメタデータを返却してきたノードの情報(peer)を返す.
+	      そのメタデータを返してきたノードの情報(peer)を返す.
 	      \\
 	\item {DeleteData}\\
 	      自身の持つメタデータを削除する命令である.
@@ -596,7 +605,7 @@ SubNetにはFindStaticMetaTargetとFindStreamMetaTargetの2種類の
 	type FindStaticMetaTarget = () => Promise<ArrayBuffer | undefined>
 	      \end{lstlisting}
 	      SubNetの持つメタデータを元に実体データを探索し,
-	      探索結果を返却する.
+	      探索結果を返す.
 	      \\
 	\item {FindStreamMetaTarget}\\
 	      StreamMetaの実体データを探索する命令である.
@@ -615,34 +624,34 @@ SubNetにはFindStaticMetaTargetとFindStreamMetaTargetの2種類の
 	      次にFindValueすべきkeyを入手している。
 	      	      	
 	      ストリームデータは長さが不明なので終了を持ち受けるのではなく,
-	      入手したチャンクを都度コールバックで返却する.
+	      入手したチャンクを都度コールバックで渡す.
 \end{itemize}
+
+\newpage
 
 \section{Actor}
 ActorはMainNetとSubNetを利用し,
 LayeredKadのシステムを実現するためのノードの実装である.
-本論文ではUser,Seeder,Navigatorの3つのActorが存在する.
+本論文ではUser, Seeder, Navigatorの3つのActorが存在する.
 一つのノードは同時に複数のActorになりうる.
 
 \subsection{User}
 UserはメタデータのURLをもとにMainNet上でメタデータを探索し,
-メタデータに対応するSubNetと接続する.
-メタデータを持つNavigatorを仲介としてSeederと接続する.
-SeederとUserのピアはSubNet上で管理される.
-
+メタデータを持つNavigatorを仲介してSubNetと接続する.
 SubNetと接続しているUserを特にObserveUserと呼ぶ。
 また、ObserveUserはSeederの役割を兼ねる。
 
 \subsubsection{SubNetへの接続}
-SubNetへの接続手順を示す。
+詳細なSubNetへの接続手順を示す。
 \begin{enumerate}
 	\item メタデータのURLをもとにMainNetでメタデータを探索する
-	\item メタデータを返却したノード(Navigator)にSeederへの接続仲介を要請する
+	\item メタデータを返したノード(Navigator)にSeederへの接続仲介を要請する
 	\item Seederとの接続完了はSubNetへ接続できたことを意味する
 	\item 
 	      ObserveUserはSeederのインスタンスを生成し、接続しているSubNet
 	      におけるSeederを兼任する
-	\item SeederはNavigatorを兼任するため、Navigatorのインスタンスを生成する
+	\item SeederはNavigatorを兼任するため、
+		  UserはNavigatorのインスタンスも生成する
 \end{enumerate}
 
 \subsubsection{Userの命令}
@@ -650,7 +659,7 @@ Userには1種類の命令が定義されている.
 \begin{itemize}
 	\item {ConnectSubNet}\\
 	      urlを元にMainNet上でメタデータを探索し,メタデータを
-	      与えてくれたノードをNavigatorとしてメタデータの実体データを
+	      返したノードをNavigatorとしてメタデータの実体データを
 	      持つ,SeederのSubNetへ接続する.\\
 	      	      	      	      
 	      型定義を以下に示す.
@@ -660,16 +669,16 @@ Userには1種類の命令が定義されている.
 	      \end{lstlisting}
 	      	      	      	      
 	      メタデータのurlを受け取り,
-	      SubNetとメタデータを返却する.		
+	      SubNetとメタデータを返す.
 \end{itemize}
 
 UserはConnectSubNetによって接続したSubNetに対して
 FindStaticMetaTargetやFindStreamMetaTargetを行うことによって
-メタデータの実体データを探索し入手する.
+メタデータの実体データを探索し入手することができる.
 
 \subsection{Seeder}
 Seederとはデータの配信を行うノードである。
-実際のユースケースでいうところのデータのアップロード者にあたる。
+実際のユースケースでいうところのデータのアップロード者などにあたる。
 Seederは任意のデータをもとにメタデータを作成し,
 メタデータをMainNet上にStoreし,SubNetを生成する。
 
@@ -677,15 +686,19 @@ SeederによってMainNet上でメタデータをStoreされたノードはNavig
 SubNetへの接続を要求するUserとSeederの橋渡しを担う.
 また,SeederもNavigatorとして振る舞う.
 
+UserがSubNet内でメタデータの実体データを探索する際にSeederは
+実体データを所持している場合、そのデータをUserに渡す。
+(なお、このプロセスはKademliaのFindValueに従う)
+
 
 \subsubsection{SubNetの生成}
-OriginSeederはメタデータをMainNetにStoreし,その結果
+SeederはメタデータをMainNetにStoreし,その結果
 メタデータのurlとStore先のノード情報(peers)を得る.
-OriginSeederはメタデータの情報を持ったSubNetを生成する.
+Seederはメタデータの情報を持ったSubNetを生成する.
 そしてpeersの対象のノードたちをNavigatorにする.
 
 \subsubsection{Seederの命令}
-SeederにはOriginSeeder用の2種類の命令が定義されている.
+Seederには2種類の命令が定義されている.
 \begin{itemize}
 	\item{StoreStatic} \\
 	静的なデータからメタデータを生成しMainNetに保存する.
@@ -699,7 +712,7 @@ SeederにはOriginSeeder用の2種類の命令が定義されている.
 	\end{lstlisting}
 					
 	引数にメタデータの名前となる文字列と静的なデータを受け取る.
-	メタデータのurlとメタデータを返却する.
+	メタデータのurlとメタデータを返す.
 				
 	\item {StoreStream}\\
 	      ストリームデータからメタデータを生成しMainNetに保存する.
@@ -718,30 +731,32 @@ SeederにはOriginSeeder用の2種類の命令が定義されている.
 	      ストリームデータの最初のチャンクデータと
 	      ストリームデータの情報を受け取る.
 	      戻り値のTriggerはfirstチャンク以降のチャンクデータを送るための
-	      コンポーネントである.urlはメタデータのurlである.
+	      コンポーネントである. urlはメタデータのurlである.
 \end{itemize}
 
 \subsection{Navigator}
-NavigatorはUserをMainNetとSubNet間の橋渡しを行うActorである.
+NavigatorはUserをSubNetに接続する際の仲介を行うActorである.
 MainNetを監視しており,UserからConnectSubNet命令を受け取った時に,
 Navigatorと接続されたSeederとUserの接続を仲介する.
 
 \subsubsection{Seederとの接続}
-LayeredKadのノードはメタデータをStoreされると,Navigatorとなるので,
+LayeredKadのノードはメタデータをStoreされると, Navigatorとなるので,
 すべてのノードが潜在的にNavigatorになるうる.
 そこで,これからNavigatorになるノードのことをNavigatorCandidateと定義する.
 NavigatorCandidateはMainNetを監視しており,
-自らにメタデータをStoreされた時に,Storeしてきたノード(Seeder)に
-対してpeerを生成しコネクションを維持する.
+NavigatorCandidate自らにメタデータをStoreされた時に,
+Storeしてきたノード(Seeder)に対してシグナリングを行い
+WebRTCのpeerを生成しコネクションを維持する.
 これによりNavigatorCandidateはNavigatorとなる.
 
 \subsubsection{UserとSeederの接続仲介}
 NavigatorはMainNetを監視し,
-Userが自らの持つメタデータを探索によって発見し,SubNetへの接続要求である.
-ConnectSubNet命令を実行した際に自らの接続するSeederに対してUserとの
-接続を行うための情報を要求する(WebRTCのSDP等)その情報をUserへ返却し,
-次にUserの接続情報(SDP等)をSeederへ渡す.
-これによりUserとSeederの間にpeerが生成され接続が完了する.
+UserがNavigator自らの持つメタデータを探索によって発見し,
+SubNetへの接続要求であるConnectSubNet命令を実行した際に
+Navigator自らの接続するSeederに対してUserとの
+接続を行うための情報を要求する(WebRTCのSDP等)。
+その情報をUserへ返し,次にUserの接続情報(SDP等)をSeederへ渡す.
+これによりUserとSeederの間にWebRTCのpeerが生成され接続が完了する.
 SeederはSubNet環境下に存在するので,
 Userはメタデータに対応するSubNetに接続できたことになる.
 
@@ -753,20 +768,20 @@ LayeredKadの動作を確認する.
 \subsubsection{静的データの保存}
 \begin{enumerate}
 	\item 
-	      webブラウザはGuestNodeにあたるので,Portalノードの
-	      トランスポートアドレスを何らかの方法で入手し,PortalNodeと接続し,
-	      MainNetにアクセスする
+	      webブラウザはGuestNodeにあたるので, Portalノードの
+	      トランスポートアドレスを何らかの方法で入手し, PortalNodeと接続し, 
+	      MainNetにアクセスする.
 	      \\
 	\item
 	      webブラウザはActorのSeederとしてStoreStatic命令を実行し,
-	      メタデータをMainNetに保存し,SubNetを生成し,Navigatorと接続する	
+	      メタデータをMainNetに保存し, SubNetを生成し, Navigatorと接続する.
 \end{enumerate}
 \subsubsection{静的データの探索}
 \begin{enumerate}
 	\item 
-	      webブラウザはGuestNodeにあたるので,Portalノードの
-	      トランスポートアドレスを何らかの方法で入手し,PortalNodeと接続し,
-	      MainNetにアクセスする
+	      webブラウザはGuestNodeにあたるので, Portalノードの
+	      トランスポートアドレスを何らかの方法で入手し, PortalNodeと接続し,
+	      MainNetにアクセスする.
 	      \\
 	\item
 	      webブラウザはActorのUserとしてConnectSubNet命令を実行し,
@@ -809,6 +824,7 @@ LayeredKadの動作を確認する.
 	      ストリームデータの観測を行う
 \end{enumerate}
 
+\newpage
 
 \section{実装}
 すべての実装において,使用したプログラム言語はTypeScriptである.
@@ -837,7 +853,7 @@ Webのフロントエンド部分はReact\footnote{https://reactjs.org/}
 \chapter{評価実験}
 本論文では,データ通信量と,タスクの処理時間の2つの観点から,
 LayeredKadの評価を行う.
-現実的なユースケースとして、
+本実験では、現実的なユースケースとして、
 幾つかのファイルがネットワーク上に共有され,
 それぞれのファイルに関心があるユーザがそれぞれのデータ毎にグループを形成し
 共有しあっているケースを想定し仮説を立てる.
@@ -961,9 +977,6 @@ KademliaとLayeredKadの実験結果のグラフを\ref{figure:traffic-3}に示�
 ノード数がいずれの場合においても、データ通信回数はLayeredKadがKademlia
 を大きく下回った。
 
-LayeredKadもKademliaもノード数の増加に対してデータ通信回数は単調増加
-しているが、LayeredKadの方が増加ペースがやや緩やかである。
-
 \subsection{考察}
 実験結果は,仮説の通りの結果となった.
 Kademliaは一つのデータを保存する際に、
@@ -1071,8 +1084,8 @@ LayeredKadはチャンク数の増加が、タスク処理時間にあまり影�
 本ベンチマークでは、複数のノードが全く同時にデータの共有タスクを
 実行しているので、現実のユースケースより、むしろ高負荷であるため、
 内部でデッドロックが発生してタイムアウトが生じたと考えられる。
-本研究のLayeredKadのMainNetとSubNet内部のKademlia部分は、
-比較用のKademliaとソースコードが同一であるため、
+本研究のLayeredKadのMainNetとSubNet内部のKademlia実装部分は、
+比較用のKademlia実装とソースコードが同一であるため、
 同一条件下でLayeredKadではタイムアウトが生じていないという点
 もLayeredKadの優位性を示せていると考えられる。
 \subsubsection{LayeredKadとKademliaの比較}
@@ -1115,9 +1128,9 @@ LayeredKadではチャンク数の増加が処理時間に影響しないこと�
 
 \section{課題}
 本研究ではLayeredKadのSubNetのノード数が少ない条件でしか実験が出来ていない。
-そのため、SubNetのノード数が増大した際には通常のKademliaと同じような
-問題が発生すると考えられる。(SubNet内部のネットワーク実装は通常のKademlia
-であるため。)
+そのため、SubNetのノード数が増大(Kより大幅に多い数に)した際には
+通常のKademliaと同じような問題が発生すると考えられる。
+(SubNet内部のネットワーク実装は通常のKademliaと同一であるため。)
 この問題を回避する案として、さらにSubNetを分割し構造化するなどといった
 アイデアが考えられるが、本研究では実装の範囲外とした。
 
