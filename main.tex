@@ -412,8 +412,6 @@ KademliaのStoreは単にValueとKey(Valueのハッシュ値)のペアしか情�
 KeyはValueのsha1ハッシュ値である必要があるが, 
 msgはアノテーションであり, 任意の文字列を取ることができる.
 
-\newpage
-
 \section{ストリームデータ}
 \subsection{ストリームデータの保存}
 ストリームデータは動的に生成される複数のチャンクデータから成り立つ.
@@ -511,7 +509,9 @@ LayeredKadではネットワークがMainNetとSubNetの2階層存在する.
 
 \subsection{MainNet}
 Kademliaをベースとしたネットワークである.
-ここでメタデータのやり取りと, 新規参加ノードとSubNetとの橋渡しを行う.
+ここでメタデータのやり取りと, 
+メタデータの実体データを扱いたいノードとSubNetとの橋渡しを行う.
+MainNetのインスタンスは一つのノードにつき一つのみ存在する。
 
 \subsubsection{ノードの種類}
 LayeredKadはウェブブラウザのような公開された
@@ -602,9 +602,10 @@ MainNetにはStore, FindValue, DeleteValueの3つの命令が定義されてい�
 Kademliaをベースとしたネットワークである.
 メタデータの指し示すデータのやり取りを行う.
 構造としては, 一つのMainNet上に複数のSubNetが存在することになる.
+そのため、SubNetのインスタンスは一つのノードに複数存在する。
 
 \subsubsection{ノードの種類}
-SubNetはMainNet上で動作するのですべての通信にWebRTCを使用している.
+SubNetはMainNet上で動作するので、すべての通信にWebRTCを使用している.
 そのためMainNetと違い, 通信方法によるノードの分類は存在しない.
 
 \subsubsection{SubNetの命令}
@@ -641,8 +642,6 @@ SubNetにはFindStaticMetaTargetとFindStreamMetaTargetの2種類の
 	      入手したチャンクを都度コールバックで渡す.
 \end{itemize}
 
-\newpage
-
 \section{Actor}
 ActorはMainNetとSubNetを利用し, 
 LayeredKadのシステムを実現するためのノードの実装である.
@@ -654,6 +653,8 @@ UserはメタデータのURLをもとにMainNet上でメタデータを探索し
 メタデータを持つNavigatorを仲介してSubNetと接続する.
 SubNetと接続しているUserを特にObserveUserと呼ぶ.
 また, ObserveUserはSeederの役割を兼ねる.
+
+Userのインスタンスは一つのノードにつき一つのみ存在する。
 
 \subsubsection{SubNetへの接続}
 詳細なSubNetへの接続手順を示す.
@@ -704,21 +705,22 @@ UserがSubNet内でメタデータの実体データを探索する際にSeeder�
 実体データを所持している場合, そのデータをUserに渡す.
 (なお, このプロセスはKademliaのFindValueに従う)
 
+SeederはSubNet毎に存在するので、Seederのインスタンスは
+一つのノードに複数存在する。
 
 \subsubsection{SubNetの生成}
 SeederはメタデータをMainNetにStoreし, その結果
 メタデータのurlとStore先のノード情報(peers)を得る.
-Seederはメタデータの情報を持ったSubNetを生成する.
-そしてpeersの対象のノードたちをNavigatorにする.
+そしてSeederはメタデータの情報を持ったSubNetを生成し
+peersの対象のノードたちをNavigatorにする.
 
 \subsubsection{Seederの命令}
-Seederには2種類の命令が定義されている.
+SeederにはStoreStaticとStoreStreamの2種類の命令が定義されている.
 \begin{itemize}
 	\item{StoreStatic} \\
 	静的なデータからメタデータを生成しMainNetに保存する.
 	その後メタデータに対応するSubNetを生成し, 
-	メタデータの実体データをSubNetに保存する.
-					
+	メタデータの実体データをSubNetに保存する.\\\\					
 	型定義を以下に示す.
 	\begin{lstlisting}
 	type StoreStatic = (name: string, ab: Buffer) =>
@@ -727,20 +729,20 @@ Seederには2種類の命令が定義されている.
 					
 	引数にメタデータの名前となる文字列と静的なデータを受け取る.
 	メタデータのurlとメタデータを返す.
-				
+	\\
 	\item {StoreStream}\\
 	      ストリームデータからメタデータを生成しMainNetに保存する.
 	      その後メタデータに対応するSubNetを生成し, 
-	      メタデータの実体データをSubNetに保存する.
-	      	      	      	      
+		  メタデータの実体であるストリームのチャンクデータを
+		  SubNetに動的に保存する.\\\\		  
 	      型定義を以下に示す.
 	      \begin{lstlisting}
-	type StoreStream = (name: string, first: Buffer, 
-		payload:{width:number, heigh:number, cycle:number}
-			) =>
-		Promise<{event:Trigger, url:string}>
+	type StoreStream = 
+		(name: string, first: Buffer, payload:
+			{width:number, heigh:number, cycle:number}
+		) => Promise<{event:Trigger, url:string}>
 	      \end{lstlisting}
-	      	      	      	      
+
 	      引数にメタデータの名前となる文字列と
 	      ストリームデータの最初のチャンクデータと
 	      ストリームデータの情報を受け取る.
@@ -837,8 +839,6 @@ LayeredKadの動作を確認する.
 	      あとはnext chunksの探索を続けることで
 	      ストリームデータの観測を行う
 \end{enumerate}
-
-\newpage
 
 \section{実装}
 すべての実装において, 使用したプログラム言語はTypeScriptである.
