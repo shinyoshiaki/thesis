@@ -602,7 +602,7 @@ MainNetにはStore, FindValue, DeleteValueの3つの命令が定義されてい�
 Kademliaをベースとしたネットワークである.
 メタデータの指し示すデータのやり取りを行う.
 構造としては, 一つのMainNet上に複数のSubNetが存在することになる.
-そのため、SubNetのインスタンスは一つのノードに複数存在する。
+そのため、SubNetのインスタンスは一つのノードに複数存在しうる。
 
 \subsubsection{ノードの種類}
 SubNetはMainNet上で動作するので、すべての通信にWebRTCを使用している.
@@ -706,7 +706,7 @@ UserがSubNet内でメタデータの実体データを探索する際にSeeder�
 (なお, このプロセスはKademliaのFindValueに従う)
 
 SeederはSubNet毎に存在するので、Seederのインスタンスは
-一つのノードに複数存在する。
+一つのノードに複数存在しうる。
 
 \subsubsection{SubNetの生成}
 SeederはメタデータをMainNetにStoreし, その結果
@@ -754,6 +754,9 @@ SeederにはStoreStaticとStoreStreamの2種類の命令が定義されている
 NavigatorはUserをSubNetに接続する際の仲介を行うActorである.
 MainNetを監視しており, UserからConnectSubNet命令を受け取った時に, 
 Navigatorと接続されたSeederとUserの接続を仲介する.
+
+Navigatorは自分の所持しているメタデータ毎に存在するので、
+Navigatorのインスタンスは一つのノードに複数存在しうる。
 
 \subsubsection{Seederとの接続}
 LayeredKadのノードはメタデータをStoreされると, Navigatorとなるので, 
