@@ -432,8 +432,9 @@ next chunkのハッシュキーをKey-Valueのmsgアノテーションとする.
 \end{figure}
 
 \subsection{ストリームデータの探索}
-図\ref{fig:subscribe-stream}のように
-Key-Valueのmsgアノテーションを辿ることで, ストリームデータ
+\label{sec:subscribe-stream}
+図\ref{fig:subscribe-stream}のようにFirstChunkのKeyを元に
+探索したValueのmsgアノテーションを辿ることで, ストリームデータ
 を動的に継続的に取得できるようになっている.
 
 \begin{figure}[H]
@@ -499,10 +500,11 @@ type StreamMeta = Meta & {
 
 payloadのfirstが実体データのストリームデータの
 最初のチャンクのハッシュキーである.
-
 width, heightは動画の縦横のピクセル数である.
-
 cycleには "$ 1000 \div フレームレート $" の値を与える.
+実体データをSubNetで探索する際には、payloadのfirstをFirstChunkのKeyとし、
+\ref{sec:subscribe-stream}節のストリームデータの探索方法に従い、
+ストリームデータをサブスクライブする。
 
 \section{Network}
 LayeredKadではネットワークがMainNetとSubNetの2階層存在する.
