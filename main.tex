@@ -62,7 +62,7 @@ technology related to blockchain.
 Because it is highly resistant to churn, it can be applied to actual services 
 and is used by many services.
 In recent years, demand for live streaming services has been increasing. 
-On the other hand, the distribution platform is highly dependent on the enterprise,
+On the other hand, the distribution platform is highly dependent on the enterprise, 
 and the service user's position is weak.
 In this paper, we implement and evaluate the underlying system 
 of a live streaming service based on Kademlia.
@@ -103,8 +103,8 @@ Twitch\footnote{https://www.twitch.tv}
 が急速に普及してきている.
 しかし, これらのサービスは膨大なサーバリソースを持つ大企業
 や大企業の提供するクラウド環境を利用するなどしなければ実現が
-難しく、 プラットフォーム事業者やクラウド事業者への依存が強く, 
-サービス利用者の立場は弱いものとなっており不健全な状態にある。
+難しく,  プラットフォーム事業者やクラウド事業者への依存が強く, 
+サービス利用者の立場は弱いものとなっており不健全な状態にある.
 ファイル共有サービスが分散型ファイル共有サービスによって, 
 リソースの分散化に成功したようにライブストリーミングサービスも
 リソースの分散化が行われることが望ましいと考えられる.
@@ -140,7 +140,7 @@ Kademliaを用いたベンチマークプログラムをNode.js上で実行し
 そのため, 本文中に登場するコードサンプルはすべてTypeScriptによるものである.
 本研究のソースコードはGithub上のリポジトリ\cite{shinyosh38:online}で
 GPLv3\footnote{https://www.gnu.org/licenses/gpl-3.0.html}
-ライセンスで公開している。
+ライセンスで公開している.
 
 % ---------------------------------------------------------------------
 
@@ -227,7 +227,7 @@ Kademliaには４種類の通信問い合わせがある.名称と内容につ�
 		  Keyに対してFindNodeをk-bucketsのKeyに対するXOR距離が近い
 		  上位K個のノードが固定されるまで繰り返し実行し
 		  k-bucketsにKeyにできるだけXOR距離が近いノードが入るように
-		  k-bucketsの最適化を行う。
+		  k-bucketsの最適化を行う.
 		  次に自身のk-bucketsから最もKeyにXORの距離が近いノードを近い順に
 		  K個選択し, そのノードらにValue, Keyの組を与える.\\	
 	\item {FIND\_VALUE}\\
@@ -256,7 +256,7 @@ Kademliaには４種類の通信問い合わせがある.名称と内容につ�
 そうすることで, 新規参加するノードはまず最大K個のノードに接続される.
 このあと, さらに自身のk-bucketsのうち最も自身のノードIDに
 XOR距離が近い上位K個のノードに対し自身のノードIDをKeyとしたFIND\_NODEを
-自分のIDに対するXOR距離が近い上位K個のノードが固定されるまで繰り返す。
+自分のIDに対するXOR距離が近い上位K個のノードが固定されるまで繰り返す.
 
 \subsubsection{ノードの離脱}
 何もしない
@@ -270,7 +270,7 @@ WebRTCとはW3Cが提唱するリアルタイム通信用の規格で，プラ�
 ウェブブラウザ間のボイスチャット，ビデオチャット，ファイル共有
 ができる．
 WebRTCはブラウザ向けの規格として誕生したが，
-現在では，Windows,Linux,Mac,AndroidやiOSといったネイティブ環境で
+現在では，Windows, Linux, Mac, AndroidやiOSといったネイティブ環境で
 動作するlibwebrtc\footnote{https://webrtc.googlesource.com/src}
 などの実装が公開されている．
 WebRTCにはNAT越えを実現するために
@@ -355,7 +355,7 @@ PeerAはPeerOのanswer側のSDPをsetRemoteDescriptionで受け取りP2P接続�
 
 \chapter{提案手法}
 \section{概要}
-本章では, Kademliaをベースに改良を施し、
+本章では, Kademliaをベースに改良を施し, 
 効率的にストリーム形式のデータを共有できるようにした
 システムであるLayeredKadを提案する.
 LayeredKadが分散型のライブストリーミングサービスの開発基盤に
@@ -363,7 +363,7 @@ LayeredKadが分散型のライブストリーミングサービスの開発基�
 
 Kademliaはデータを共有する際に, 
 FindNodeを繰り返し実行し, k-bucketsを最適化する.
-その際に, ネットワーク上の不特定多数のノードと通信した上、
+その際に, ネットワーク上の不特定多数のノードと通信した上, 
 最大でK個の不特定なノードにデータを保存することになる.
 そのためKademliaで連続的なストリーム形式のデータを共有する場合, 
 個々のストリームのチャンクデータをネットワーク全体の
@@ -424,8 +424,8 @@ LayeredKadでは一つのID(最初のチャンクのハッシュ値)
 そのチャンクデータ(便宜上chunkとする)の次に生成される
 チャンクデータ(便宜上next chunkとする)が生成されるのを待ち, 
 next chunkのハッシュ値をKey-Valueのmsgアノテーションとする.
-ストリーミングを終了する際にはmsgにハッシュ値ではなく、
-"complete"文字列を与える。
+ストリーミングを終了する際にはmsgにハッシュ値ではなく, 
+"complete"文字列を与える.
 チャンクデータを保存する様子を図\ref{fig:streamdata}に示す.
 \begin{figure}[H]
 	\centering
@@ -439,8 +439,8 @@ next chunkのハッシュ値をKey-Valueのmsgアノテーションとする.
 図\ref{fig:subscribe-stream}のようにFirstChunkのKeyを元に
 探索したValueのmsgアノテーションを辿ることで, ストリームデータ
 を動的に継続的に取得できるようになっている.
-msgの中がハッシュ値ではなく"complete"文字列なら、ストリームデータ
-が終了したとみなし、ストリームの観測を終了する。
+msgの中がハッシュ値ではなく"complete"文字列なら, ストリームデータ
+が終了したとみなし, ストリームの観測を終了する.
 
 \begin{figure}[H]
 	\centering
@@ -474,7 +474,7 @@ payloadには実体データに関する情報を与える.
 StreamMetaが存在する
 
 \subsection{StaticMeta}
-静的なデータを扱うメタデータである。
+静的なデータを扱うメタデータである.
 \\
 \begin{lstlisting}
 type StaticMeta = Meta & {
@@ -484,11 +484,11 @@ type StaticMeta = Meta & {
 \end{lstlisting}
 
 payloadのkeysが実体データのハッシュキーの集合である.
-実体データをSubNetで探索する際には、keysのそれぞれのKeyをFindValueで
-探索し、最後に結合する。
+実体データをSubNetで探索する際には, keysのそれぞれのKeyをFindValueで
+探索し, 最後に結合する.
 
 \subsection{StreamMeta}
-ストリーム(ライブ映像など)を扱うメタデータである。
+ストリーム(ライブ映像など)を扱うメタデータである.
 \\
 \begin{lstlisting}
 type StreamMetaPayload = {
@@ -507,9 +507,9 @@ payloadのfirstが実体データのストリームデータの
 最初のチャンクのハッシュキーである.
 width, heightは動画の縦横のピクセル数である.
 cycleには "$ 1000 \div フレームレート $" の値を与える.
-実体データをSubNetで探索する際には、payloadのfirstをFirstChunkのKeyとし、
-\ref{sec:subscribe-stream}節のストリームデータの探索方法に従い、
-ストリームデータをサブスクライブする。
+実体データをSubNetで探索する際には, payloadのfirstをFirstChunkのKeyとし, 
+\ref{sec:subscribe-stream}節のストリームデータの探索方法に従い, 
+ストリームデータをサブスクライブする.
 
 \section{Network}
 LayeredKadではネットワークがMainNetとSubNetの2階層存在する.
@@ -518,7 +518,7 @@ LayeredKadではネットワークがMainNetとSubNetの2階層存在する.
 Kademliaをベースとしたネットワークである.
 ここでメタデータのやり取りと, 
 メタデータの実体データを扱いたいノードとSubNetとの橋渡しを行う.
-MainNetのインスタンスは一つのノードにつき一つのみ存在する。
+MainNetのインスタンスは一つのノードにつき一つのみ存在する.
 
 \subsubsection{ノードの種類}
 LayeredKadはウェブブラウザのような公開された
@@ -609,10 +609,10 @@ MainNetにはStore, FindValue, DeleteValueの3つの命令が定義されてい�
 Kademliaをベースとしたネットワークである.
 メタデータの指し示すデータのやり取りを行う.
 構造としては, 一つのMainNet上に複数のSubNetが存在することになる.
-そのため、SubNetのインスタンスは一つのノードに複数存在しうる。
+そのため, SubNetのインスタンスは一つのノードに複数存在しうる.
 
 \subsubsection{ノードの種類}
-SubNetはMainNet上で動作するので、すべての通信にWebRTCを使用している.
+SubNetはMainNet上で動作するので, すべての通信にWebRTCを使用している.
 そのためMainNetと違い, 通信方法によるノードの分類は存在しない.
 
 \subsubsection{SubNetの命令}
@@ -661,7 +661,7 @@ UserはメタデータのURLをもとにMainNet上でメタデータを探索し
 SubNetと接続しているUserを特にObserveUserと呼ぶ.
 また, ObserveUserはSeederの役割を兼ねる.
 
-Userのインスタンスは一つのノードにつき一つのみ存在する。
+Userのインスタンスは一つのノードにつき一つのみ存在する.
 
 \subsubsection{SubNetへの接続}
 詳細なSubNetへの接続手順を示す.
@@ -712,8 +712,8 @@ UserがSubNet内でメタデータの実体データを探索する際にSeeder�
 実体データを所持している場合, そのデータをUserに渡す.
 (なお, このプロセスはKademliaのFindValueに従う)
 
-SeederはSubNet毎に存在するので、Seederのインスタンスは
-一つのノードに複数存在しうる。
+SeederはSubNet毎に存在するので, Seederのインスタンスは
+一つのノードに複数存在しうる.
 
 \subsubsection{SubNetの生成}
 SeederはメタデータをMainNetにStoreし, その結果
@@ -762,12 +762,12 @@ NavigatorはUserをSubNetに接続する際の仲介を行うActorである.
 MainNetを監視しており, UserからConnectSubNet命令を受け取った時に, 
 Navigatorと接続されたSeederとUserの接続を仲介する.
 
-Navigatorは自分の所持しているメタデータ毎に存在するので、
-Navigatorのインスタンスは一つのノードに複数存在しうる。
-NavigatorはSubNetには参加していない。
+Navigatorは自分の所持しているメタデータ毎に存在するので, 
+Navigatorのインスタンスは一つのノードに複数存在しうる.
+NavigatorはSubNetには参加していない.
 
 \subsubsection{Seederとの接続}
-LayeredKadのノードはMainNet上でメタデータをStoreされると,
+LayeredKadのノードはMainNet上でメタデータをStoreされると, 
 Navigatorになるので, すべてのノードが潜在的にNavigatorになるうる.
 そこで, これからNavigatorになるノードのことをNavigatorCandidateと表現する.
 NavigatorCandidateはMainNetを監視しており, 
@@ -848,7 +848,7 @@ LayeredKadの動作を確認する.
 	      SubNet上でメタデータのペイロードに記載されている
 	      firstチャンクデータの実体データを探索し, 入手する.
 		  あとは\ref{sec:subscribe-stream}節のようにmsgアノテーション
-		  を辿りチャンクの探索を続けることでストリームデータの観測を行う。
+		  を辿りチャンクの探索を続けることでストリームデータの観測を行う.
 \end{enumerate}
 
 \section{実装}
@@ -881,9 +881,9 @@ LayeredKadの評価を行う.
 本実験では, 現実的なユースケースとして, 
 幾つかのファイルがネットワーク上に共有され, 
 それぞれのファイルに関心があるユーザがそれぞれのデータ毎にグループを形成し
-共有しあっているケースを想定し仮説を立て、実験検証を行う.
+共有しあっているケースを想定し仮説を立て, 実験検証を行う.
 評価実験のシナリオのイメージを
-図\ref{fig:trafficBenchmark}に示す。
+図\ref{fig:trafficBenchmark}に示す.
 
 \begin{figure}[H]
 	\centering
@@ -1045,11 +1045,11 @@ LayeredKadではユーザグループ(SubNet)内で完結するため,
 \end{table}
 
 本実験のシナリオとデータ通信量のベンチマーカーのシナリオとの相違点は
-通信量ベンチマーカーがノード数を変数としていたのに対して、
+通信量ベンチマーカーがノード数を変数としていたのに対して, 
 本実験のベンチマーカーはノード数をノード数を16で固定とし, 
-共有するデータ数のチャンキング数を変数としている点である。
-ストリームデータはチャンク数が非常に多いので、チャンク数が多いほど
-ストリームデータに性質が近いと言える。
+共有するデータ数のチャンキング数を変数としている点である.
+ストリームデータはチャンク数が非常に多いので, チャンク数が多いほど
+ストリームデータに性質が近いと言える.
 タスク処理時間をより正確に計測するために, 
 1ノードに付き, CPUのスレッド1つを割り当てるようにベンチマークプログラムの
 マルチスレッド化を行っている.
