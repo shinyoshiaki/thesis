@@ -244,15 +244,17 @@ Kademliaには４種類の通信問い合わせがある.名称と内容につ�
 そうでなければ送信元の新しいノードをk-bucketに追加する.
 こうすることで長時間オンラインになっているノードが優先的にk-bucketに残るため, 
 ネットワークの安定性が増す.
+
 \subsubsection{ノードの新規参加}
 新規参加するノードは, 
-まず接続先のノードに対して自身のノードIDをkeyとしてFIND\_NODEを行う.
-問い合わせを受けたノードは送信元のkeyに近い最大K個のノードの情報を
-送信元にSTOREする.
+まず接続先のノードに対して自身のノードIDをKeyとしてFIND\_NODEを行う.
+問い合わせを受けたノードは送信元のKeyに近い最大K個のノードの情報を
+送信元のノードに返す.
 そうすることで, 新規参加するノードはまず最大K個のノードに接続される.
 このあと, さらに自身のk-bucketsのうち最も自身のノードIDに
-xor距離が近いノードに対し自身のノードIDをkeyとしたFIND\_NODEを
-繰り返すことで接続先のノードを増やすことができる.
+XOR距離が近い上位K個のノードに対し自身のノードIDをKeyとしたFIND\_NODEを
+自分のIDに対するXOR距離が近い上位K個のノードが固定されるまで繰り返す。
+
 \subsubsection{ノードの離脱}
 何もしない
 
@@ -265,13 +267,9 @@ WebRTCとはW3Cが提唱するリアルタイム通信用の規格で，プラ�
 ウェブブラウザ間のボイスチャット，ビデオチャット，ファイル共有
 ができる．
 WebRTCはブラウザ向けの規格として誕生したが，
-現在では，AndroidやiOSといったネイティブ環境で実装する
-ためのライブラリが公開されている．
-サーバサイド向けにも
-libwebrtc\footnote{https://webrtc.googlesource.com/src}
-などの実装が存在する.
-WebRTCはGoogleによってオープンソース化されており，
-現在は，W3Cによってブラウザ対応APIの標準化が進められている.
+現在では，Windows,Linux,Mac,AndroidやiOSといったネイティブ環境で
+動作するlibwebrtc\footnote{https://webrtc.googlesource.com/src}
+などの実装が公開されている．
 WebRTCにはNAT越えを実現するために
 ICE\cite{rosenberg2010interactive}という仕組みを採用している.
 
@@ -324,11 +322,11 @@ TURNサーバは利用していない.
 \subsection{シグナリング}
 WebRTCでは，SDPとICE Candidateの二つの情報を端末間で交換することによって
 P2P通信が開始される．このSDP等を交換する作業をシグナリングと言う．
-シグナリングを行うためにはSDP等を交換する必要がある．
+シグナリングを行うためにはSDPとICE Candidateを交換する必要がある．
 シグナリングにはTrickle IceとVanilla Iceの2つの方法がある.
 本研究ではVanilla Iceというシグナリング手法を用いる．
 Vanilla Iceは，実装が容易である，
-シグナリングサーバとの通信回数が少ないというメリットがある一方，
+シグナリングのための通信回数が少ないというメリットがある一方，
 P2P接続の完了にかかる時間がTrickle Iceより長くなる傾向がある．
 Vanilla Iceの手順について説明する．
 Vanilla Iceの概要図を図\ref{fig:signaling}に示す．
