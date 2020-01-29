@@ -138,6 +138,9 @@ Kademliaを用いたベンチマークプログラムをNode.js上で実行し
 本論文ではTypeScript\footnote{https://www.typescriptlang.org}
 というプログラム言語を用いて研究を行っている.
 そのため, 本文中に登場するコードサンプルはすべてTypeScriptによるものである.
+本研究のソースコードはGithub上のリポジトリ\cite{shinyosh38:online}で
+GPLv3\footnote{https://www.gnu.org/licenses/gpl-3.0.html}
+ライセンスで公開している。
 
 % ---------------------------------------------------------------------
 
@@ -415,12 +418,14 @@ msgはアノテーションであり, 任意の文字列を取ることができ
 \section{ストリームデータ}
 \subsection{ストリームデータの保存}
 ストリームデータは動的に生成される複数のチャンクデータから成り立つ.
-LayeredKadでは一つのキー(最初のチャンクのハッシュキー)
+LayeredKadでは一つのID(最初のチャンクのハッシュ値)
 から全チャンクデータを探索できるようにする必要がある.
 そのため, チャンクデータをKademlia上に保存する際には, 
 そのチャンクデータ(便宜上chunkとする)の次に生成される
 チャンクデータ(便宜上next chunkとする)が生成されるのを待ち, 
-next chunkのハッシュキーをKey-Valueのmsgアノテーションとする.
+next chunkのハッシュ値をKey-Valueのmsgアノテーションとする.
+ストリーミングを終了する際にはmsgにハッシュ値ではなく、
+"complete"文字列を与える。
 チャンクデータを保存する様子を図\ref{fig:streamdata}に示す.
 \begin{figure}[H]
 	\centering
@@ -434,6 +439,8 @@ next chunkのハッシュキーをKey-Valueのmsgアノテーションとする.
 図\ref{fig:subscribe-stream}のようにFirstChunkのKeyを元に
 探索したValueのmsgアノテーションを辿ることで, ストリームデータ
 を動的に継続的に取得できるようになっている.
+msgの中がハッシュ値ではなく"complete"文字列なら、ストリームデータ
+が終了したとみなし、ストリームの観測を終了する。
 
 \begin{figure}[H]
 	\centering
@@ -759,13 +766,13 @@ Navigatorは自分の所持しているメタデータ毎に存在するので�
 Navigatorのインスタンスは一つのノードに複数存在しうる。
 
 \subsubsection{Seederとの接続}
-LayeredKadのノードはメタデータをStoreされると, Navigatorとなるので, 
-すべてのノードが潜在的にNavigatorになるうる.
-そこで, これからNavigatorになるノードのことをNavigatorCandidateと定義する.
+LayeredKadのノードはMainNet上でメタデータをStoreされると,
+Navigatorになるので, すべてのノードが潜在的にNavigatorになるうる.
+そこで, これからNavigatorになるノードのことをNavigatorCandidateと表現する.
 NavigatorCandidateはMainNetを監視しており, 
 NavigatorCandidate自らにメタデータをStoreされた時に, 
 Storeしてきたノード(Seeder)に対してシグナリングを行い
-WebRTCのpeerを生成しコネクションを維持する.
+WebRTCのpeerを生成しコネクションを作る.
 これによりNavigatorCandidateはNavigatorとなる.
 
 \subsubsection{UserとSeederの接続仲介}
@@ -839,8 +846,8 @@ LayeredKadの動作を確認する.
 	      webブラウザはSubNetのFindStreamMetaTarget命令を実行し, 
 	      SubNet上でメタデータのペイロードに記載されている
 	      firstチャンクデータの実体データを探索し, 入手する.
-	      あとはnext chunksの探索を続けることで
-	      ストリームデータの観測を行う
+		  あとは\ref{sec:subscribe-stream}節のようにmsgアノテーション
+		  を辿りチャンクの探索を続けることでストリームデータの観測を行う。
 \end{enumerate}
 
 \section{実装}
@@ -851,7 +858,7 @@ Node.jsとwebブラウザ上で動作するように実装を行った.
 P2P通信部部にはWebRTCを用いている.
 
 \subsection{ベンチマーカー}
-通常のKademliaと本手法のLayeredKadの性能比較を行うために, 
+通常のKademliaとLayeredKadの性能比較を行うために, 
 Node.js上で動作するベンチマーカーの実装を行った.
 なお, ベンチマーカーは実装の都合上P2P通信部分はWebRTCではなく, 
 UDPを使用してWebRTCの挙動を再現している.
