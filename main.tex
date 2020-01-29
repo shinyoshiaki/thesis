@@ -764,6 +764,7 @@ Navigatorと接続されたSeederとUserの接続を仲介する.
 
 Navigatorは自分の所持しているメタデータ毎に存在するので、
 Navigatorのインスタンスは一つのノードに複数存在しうる。
+NavigatorはSubNetには参加していない。
 
 \subsubsection{Seederとの接続}
 LayeredKadのノードはMainNet上でメタデータをStoreされると,
@@ -880,7 +881,16 @@ LayeredKadの評価を行う.
 本実験では, 現実的なユースケースとして, 
 幾つかのファイルがネットワーク上に共有され, 
 それぞれのファイルに関心があるユーザがそれぞれのデータ毎にグループを形成し
-共有しあっているケースを想定し仮説を立てる.
+共有しあっているケースを想定し仮説を立て、実験検証を行う.
+評価実験のシナリオのイメージを
+図\ref{fig:trafficBenchmark}に示す。
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=10cm]{./assets/image/traffic_benchmark.png}
+	\caption{評価実験のシナリオのイメージ}
+	\label{fig:trafficBenchmark}
+\end{figure}
 
 \section{データ通信量}
 \subsection{仮説}
@@ -917,17 +927,6 @@ Kademliaとノード数が同じであれば, ネットワーク全体におけ�
 
 本ベンチマークプログラムでは, ノードのペアを1グループとして, 
 ファイル共有を行わせる.
-
-ベンチマークプログラムのシナリオのイメージを
-図\ref{fig:trafficBenchmark}に示す
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=10cm]{./assets/image/traffic_benchmark.png}
-	\caption{通信量ベンチマークのイメージ}
-	\label{fig:trafficBenchmark}
-\end{figure}
-
 ノード数を変数パラメータとして, パラメータの値を増加させ, 
 LayeredKadとKademliaのデータ通信回数を記録し, 比較を行う.
 
@@ -1004,7 +1003,7 @@ KademliaとLayeredKadの実験結果のグラフを\ref{figure:traffic-3}に示�
 \subsection{考察}
 実験結果は, 仮説の通りの結果となった.
 Kademliaは一つのデータを保存する際に, 
-最大でk-bucketのサイズ分(本論文では20)のノードとデータのやり取りを
+k-bucketのサイズ分(本論文では20)のノードとデータのやり取りを
 することになるため, この実験結果のような通信回数になったと考えられる.
 
 一方LayeredKadはデータ毎にSubNetを生成し, その内部でデータの
