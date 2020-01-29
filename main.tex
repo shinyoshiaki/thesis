@@ -352,7 +352,7 @@ PeerAはPeerOのanswer側のSDPをsetRemoteDescriptionで受け取りP2P接続�
 
 \chapter{提案手法}
 \section{概要}
-本章では, Kademliaを構造化して
+本章では, Kademliaをベースに改良を施し、
 効率的にストリーム形式のデータを共有できるようにした
 システムであるLayeredKadを提案する.
 LayeredKadが分散型のライブストリーミングサービスの開発基盤に
@@ -360,7 +360,7 @@ LayeredKadが分散型のライブストリーミングサービスの開発基�
 
 Kademliaはデータを共有する際に, 
 FindNodeを繰り返し実行し, k-bucketsを最適化する.
-その際に, ネットワーク上の不特定多数のノードと通信した上
+その際に, ネットワーク上の不特定多数のノードと通信した上、
 最大でK個の不特定なノードにデータを保存することになる.
 そのためKademliaで連続的なストリーム形式のデータを共有する場合, 
 個々のストリームのチャンクデータをネットワーク全体の
@@ -376,9 +376,9 @@ FindNodeを繰り返し実行し, k-bucketsを最適化する.
 ストリームデータのような連続的なデータでも効率よく共有できるようにする.
 
 本手法では, 共有するデータの情報をメタデータとして, 
-Kademliaネットワーク上で共有する.
+全ノードが参加するKademliaネットワーク上で共有する.
 このメタデータを共有するネットワークをMainNetと定義する.
-MainNet上でメタデータの実体データの共有を目的とするユーザ同士で
+MainNet上でメタデータの実体データの共有を目的とするノード同士で
 さらに別のKademliaネットワークを構築し, メタデータの情報に従い
 メタデータに対応する実体データの共有を行う.
 この実体データを共有するネットワークをSubNetとする.
@@ -396,11 +396,11 @@ LayeredKadにおける幾つかの用語はBitTorrentのRFC\cite{bep0000r38:onli
 の影響を受けている.
 
 \section{Kademliaの拡張}
-KademliaのStoreは単にvalueとkey(valueのハッシュ値)のペアしか情報を
+KademliaのStoreは単にValueとKey(Valueのハッシュ値)のペアしか情報を
 持たない.
 しかし, ストリームデータを扱う際にチャンクデータ同士の
-関係性を表すためにはvalueとkeyだけでは情報が不足する.
-そのためLayeredKadのKademliaではvalueとkeyのペアに対し
+関係性を表すためにはValueとKeyだけでは情報が不足する.
+そのためLayeredKadのKademliaではValueとKeyのペアに対し
 任意の文字列をアノテーションすることを許可する拡張を行う.
 このアノテーションは現状ストリームデータの共有にのみ用いられる.
 \\\\
@@ -409,18 +409,46 @@ KademliaのStoreは単にvalueとkey(valueのハッシュ値)のペアしか情�
 	type Store = 
 		(key: string, value: any, msg?: string) => void
 \end{lstlisting}
-keyはvalueのsha1ハッシュ値である必要があるが, 
-msgがアノテーションであり, 任意の文字列を取る.
+KeyはValueのsha1ハッシュ値である必要があるが, 
+msgはアノテーションであり, 任意の文字列を取ることができる.
 
 \newpage
 
+\section{ストリームデータ}
+\subsection{ストリームデータの保存}
+ストリームデータは動的に生成される複数のチャンクデータから成り立つ.
+LayeredKadでは一つのキー(最初のチャンクのハッシュキー)
+から全チャンクデータを探索できるようにする必要がある.
+そのため, チャンクデータをKademlia上に保存する際には, 
+そのチャンクデータ(便宜上chunkとする)の次に生成される
+チャンクデータ(便宜上next chunkとする)が生成されるのを待ち, 
+next chunkのハッシュキーをKey-Valueのmsgアノテーションとする.
+チャンクデータを保存する様子を図\ref{fig:streamdata}に示す.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=10cm]{./assets/image/stream.png}
+	\caption{ストリームデータの保存}
+	\label{fig:streamdata}
+\end{figure}
+
+\subsection{ストリームデータの探索}
+図\ref{fig:subscribe-stream}のように
+Key-Valueのmsgアノテーションを辿ることで, ストリームデータ
+を動的に継続的に取得できるようになっている.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=10cm]{./assets/image/subscribeStream.png}
+	\caption{ストリームデータの探索}
+	\label{fig:subscribe-stream}
+\end{figure}
+
 \section{メタデータ}
 LayeredKadでは静的, 動的の両方のデータ形式の
-共有に対応するためにメタデータとして
-共有するデータの情報の共有を行い, メタデータの情報に従って
-振る舞いを変化させる.
+共有に対応するために共有するデータの情報メタデータとして
+共有し, メタデータの情報に従ってノードの振る舞いを変化させる.
 メタデータの基本構造は次のようになっている.
-
+\\
 \begin{lstlisting}
 type Meta = {
   type: "static" | "stream";
@@ -435,9 +463,13 @@ typeはメタデータの種類を表す.
 nameはメタデータの名前である. nameには任意の文字列を与える.
 
 payloadには実体データに関する情報を与える.
+\\\\
+本研究ではこの基本的なMetaデータ構造を拡張したStaticMetaと
+StreamMetaが存在する
 
 \subsection{StaticMeta}
-静的なデータを扱うメタデータ
+静的なデータを扱うメタデータである。
+\\
 \begin{lstlisting}
 type StaticMeta = Meta & {
   type: "static";
@@ -446,9 +478,12 @@ type StaticMeta = Meta & {
 \end{lstlisting}
 
 payloadのkeysが実体データのハッシュキーの集合である.
+実体データをSubNetで探索する際には、keysのそれぞれのKeyをFindValueで
+探索し、最後に結合する。
 
 \subsection{StreamMeta}
-ストリーム(ライブ映像など)を扱うメタデータ
+ストリーム(ライブ映像など)を扱うメタデータである。
+\\
 \begin{lstlisting}
 type StreamMetaPayload = {
   first: string;
@@ -468,26 +503,6 @@ payloadのfirstが実体データのストリームデータの
 width, heightは動画の縦横のピクセル数である.
 
 cycleには "$ 1000 \div フレームレート $" の値を与える.
-
-\subsubsection{ストリームデータ}
-ストリームデータは複数の動的に生成される
-チャンクデータから成り立つ.
-LayeredKadでは一つのキー(最初のチャンクのハッシュキー)
-から全チャンクデータを探索できるようにする必要がある.
-そのため, チャンクデータをKademlia上に保存する際には, 
-そのチャンクデータ(便宜上chunksとする)の次に生成される
-チャンクデータ(便宜上next chunksとする)が生成されるのを待ち, 
-next chunksのハッシュキーをkey-valueのアノテーションとする.
-チャンクデータを保存する様子を図\ref{fig:streamdata}に示す.
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=10cm]{./assets/image/stream.png}
-	\caption{ストリームデータ}
-	\label{fig:streamdata}
-\end{figure}
-
-key-valueのアノテーションを辿ることで, ストリームデータ
-を動的に継続的に取得できるようになっている.
 
 \section{Network}
 LayeredKadではネットワークがMainNetとSubNetの2階層存在する.
