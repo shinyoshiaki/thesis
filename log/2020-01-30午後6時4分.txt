@@ -1,0 +1,239 @@
+yarn run v1.19.2
+$ /home/y-shin/benchmark/sp2p/benchmark/node_modules/.bin/ts-node ./worker/layered.bench.ts
+layered/worker  1
+layered/worker  worker setup done
+layered/worker  network setup done
+layered/worker  store done
+layered/worker  findvalue 8
+layered/worker  end bench 2.483s traffic
+layered/worker  clean up
+Done in 26.59s.
+yarn run v1.19.2
+$ /home/y-shin/benchmark/sp2p/benchmark/node_modules/.bin/ts-node ./worker/kad.bench.ts
+kad/worker  1
+kad/worker  worker setup done
+kad/worker  network setup done
+kad/worker  store done
+kad/worker  findvalue 8
+kad/worker  end bench 0.712s traffic
+kad/worker  clean up
+Done in 21.17s.
+
+yarn run v1.19.2
+$ /home/y-shin/benchmark/sp2p/benchmark/node_modules/.bin/ts-node ./worker/layered.bench.ts
+layered/worker  11
+layered/worker  worker setup done
+layered/worker  network setup done
+layered/worker  store done
+layered/worker  findvalue 8
+layered/worker  end bench 2.787s traffic
+layered/worker  clean up
+Done in 26.28s.
+yarn run v1.19.2
+$ /home/y-shin/benchmark/sp2p/benchmark/node_modules/.bin/ts-node ./worker/kad.bench.ts
+kad/worker  11
+kad/worker  worker setup done
+kad/worker  network setup done
+kad/worker  store done
+kad/worker  findvalue 8
+kad/worker  end bench 1.341s traffic
+kad/worker  clean up
+Done in 22.38s.
+
+$ /home/y-shin/benchmark/sp2p/benchmark/node_modules/.bin/ts-node ./worker/layered.bench.ts
+layered/worker  111
+layered/worker  worker setup done
+layered/worker  network setup done
+layered/worker  store done
+layered/worker  findvalue 8
+layered/worker  end bench 2.246s traffic
+layered/worker  clean up
+Done in 26.82s.
+yarn run v1.19.2
+$ /home/y-shin/benchmark/sp2p/benchmark/node_modules/.bin/ts-node ./worker/kad.bench.ts
+kad/worker  111
+kad/worker  worker setup done
+kad/worker  network setup done
+kad/worker  store done
+kad/worker  findvalue 8
+kad/worker  end bench 1.773s traffic
+kad/worker  clean up
+Done in 22.13s.
+
+yarn run v1.19.2
+$ /home/y-shin/benchmark/sp2p/benchmark/node_modules/.bin/ts-node ./worker/layered.bench.ts
+layered/worker  1111
+layered/worker  worker setup done
+layered/worker  network setup done
+layered/worker  store done
+layered/worker  findvalue 8
+layered/worker  end bench 3.336s traffic
+layered/worker  clean up
+Done in 26.95s.
+yarn run v1.19.2
+$ /home/y-shin/benchmark/sp2p/benchmark/node_modules/.bin/ts-node ./worker/kad.bench.ts
+kad/worker  1111
+kad/worker  worker setup done
+kad/worker  network setup done
+kad/worker  store done
+kad/worker  findvalue 8
+kad/worker  end bench 2.272s traffic
+kad/worker  clean up
+Done in 23.24s.
+
+yarn run v1.19.2
+$ /home/y-shin/benchmark/sp2p/benchmark/node_modules/.bin/ts-node ./worker/layered.bench.ts
+layered/worker  11111
+layered/worker  worker setup done
+layered/worker  network setup done
+layered/worker  store done
+layered/worker  findvalue 8
+layered/worker  end bench 3.023s traffic
+layered/worker  clean up
+Done in 27.10s.
+yarn run v1.19.2
+$ /home/y-shin/benchmark/sp2p/benchmark/node_modules/.bin/ts-node ./worker/kad.bench.ts
+kad/worker  11111
+kad/worker  worker setup done
+kad/worker  network setup done
+kad/worker  store done
+kad/worker  findvalue 8
+kad/worker  end bench 2.766s traffic
+kad/worker  clean up
+Done in 23.08s.
+
+yarn run v1.19.2
+$ /home/y-shin/benchmark/sp2p/benchmark/node_modules/.bin/ts-node ./worker/layered.bench.ts
+layered/worker  111111
+layered/worker  worker setup done
+layered/worker  network setup done
+layered/worker  store done
+layered/worker  findvalue 8
+layered/worker  end bench 3.907s traffic
+layered/worker  clean up
+Done in 27.06s.
+yarn run v1.19.2
+$ /home/y-shin/benchmark/sp2p/benchmark/node_modules/.bin/ts-node ./worker/kad.bench.ts
+kad/worker  111111
+kad/worker  worker setup done
+kad/worker  network setup done
+kad/worker  store done
+timeout FindValue udp mock 5000
+timeout FindValue udp mock 5000
+timeout FindValue udp mock 5000
+timeout FindValue udp mock 5000
+timeout FindValue udp mock 5000
+timeout FindValue udp mock 5000
+timeout FindValue udp mock 5000
+timeout FindValue udp mock 5000
+timeout FindValue udp mock 5000
+timeout FindValue udp mock 5000
+timeout FindValue udp mock 5000
+timeout FindValue udp mock 5000
+timeout FindValue udp mock 5000
+timeout FindValue udp mock 5000
+timeout FindValue udp mock 5000
+timeout FindValue udp mock 5000
+timeout FindValue udp mock 5000
+timeout FindValue udp mock 5000
+timeout FindValue udp mock 5000
+timeout FindValue udp mock 5000
+kad/worker  findvalue 8
+kad/worker  end bench 8.282s traffic
+kad/worker  clean up
+Done in 30.21s.
+
+yarn run v1.19.2
+$ /home/y-shin/benchmark/sp2p/benchmark/node_modules/.bin/ts-node ./worker/layered.bench.ts
+layered/worker  1111111
+layered/worker  worker setup done
+layered/worker  network setup done
+layered/worker  store done
+layered/worker  findvalue 8
+layered/worker  end bench 4.085s traffic
+layered/worker  clean up
+Done in 27.33s.
+yarn run v1.19.2
+$ /home/y-shin/benchmark/sp2p/benchmark/node_modules/.bin/ts-node ./worker/kad.bench.ts
+kad/worker  1111111
+kad/worker  worker setup done
+kad/worker  network setup done
+kad/worker  store done
+timeout FindValue udp mock 5000
+kad/worker  findvalue 8
+kad/worker  end bench 13.334s traffic
+kad/worker  clean up
+Done in 33.86s.
+
+yarn run v1.19.2
+$ /home/y-shin/benchmark/sp2p/benchmark/node_modules/.bin/ts-node ./worker/layered.bench.ts
+layered/worker  11111111
+layered/worker  worker setup done
+layered/worker  network setup done
+layered/worker  store done
+layered/worker  findvalue 8
+layered/worker  end bench 2.859s traffic
+layered/worker  clean up
+Done in 26.89s.
+yarn run v1.19.2
+$ /home/y-shin/benchmark/sp2p/benchmark/node_modules/.bin/ts-node ./worker/kad.bench.ts
+kad/worker  11111111
+kad/worker  worker setup done
+kad/worker  network setup done
+timeout FindNode 5000 udp mock
+kad/worker  store done
+timeout FindValue udp mock 5000
+kad/worker  findvalue 8
+kad/worker  end bench 12.619s traffic
+kad/worker  clean up
+Done in 34.39s.
+
+yarn run v1.19.2
+$ /home/y-shin/benchmark/sp2p/benchmark/node_modules/.bin/ts-node ./worker/layered.bench.ts
+layered/worker  111111111
+layered/worker  worker setup done
+layered/worker  network setup done
+layered/worker  store done
+layered/worker  findvalue 8
+layered/worker  end bench 4.012s traffic
+layered/worker  clean up
+Done in 28.36s.
+yarn run v1.19.2
+$ /home/y-shin/benchmark/sp2p/benchmark/node_modules/.bin/ts-node ./worker/kad.bench.ts
+kad/worker  111111111
+kad/worker  worker setup done
+kad/worker  network setup done
+timeout FindNode 5000 udp mock
+kad/worker  store done
+timeout FindValue udp mock 5000
+kad/worker  findvalue 8
+kad/worker  end bench 14.313s traffic
+timeout FindValue udp mock 5000
+kad/worker  clean up
+Done in 36.61s.
+
+yarn run v1.19.2
+$ /home/y-shin/benchmark/sp2p/benchmark/node_modules/.bin/ts-node ./worker/layered.bench.ts
+layered/worker  1111111111
+layered/worker  worker setup done
+layered/worker  network setup done
+layered/worker  store done
+layered/worker  findvalue 8
+layered/worker  end bench 3.635s traffic
+layered/worker  clean up
+Done in 28.47s.
+yarn run v1.19.2
+$ /home/y-shin/benchmark/sp2p/benchmark/node_modules/.bin/ts-node ./worker/kad.bench.ts
+kad/worker  1111111111
+kad/worker  worker setup done
+kad/worker  network setup done
+timeout FindNode 5000 udp mock
+kad/worker  store done
+timeout FindValue udp mock 5000
+kad/worker  findvalue 8
+kad/worker  end bench 13.586s traffic
+kad/worker  clean up
+Done in 34.17s.
+
+
+
