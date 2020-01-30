@@ -38,20 +38,23 @@
 分散ハッシュテーブルはファイル共有サービス等に応用され, 
 すでに普及している一方で, 
 近年はブロックチェーンの関連技術としても注目を集めている.
+%
 分散ハッシュテーブルの中でもKademlia
 はその実装の容易さとノードの出入りに対する耐性の強さから
 実用的なサービスへの応用が可能であり, 
 多くのサービスで採用されている.
-近年, ライブストリーミングサービスの需要が高まっている.
+%
+近年, ライブストリーミングサービスの需要が高まっている
 一方で配信プラットフォームの事業者への依存が強く
 サービス利用者の立場は弱いものとなっている.
-そこで本論文では
-分散的なライブストリーミングサービスの基盤となる
+そこで本論文では分散的なライブストリーミングサービスの基盤となる
 システムをKademliaを元に実装し, その評価を行った.
+%
 Kademlia上で単純にライブストリーミングの実装を行う場合, 
 非効率的な通信が発生するが, 本論文の手法では, 
 Kademliaネットワークを階層化することで
 非効率的な通信を削減することが可能となった.
+%
 結果, 分散的なライブストリーミングサービスの実装への
 足がかりを作ることが出来た.
 \end{abstract}
@@ -66,10 +69,10 @@ Kademlia can be applied to practical services
 and is adopted by many services 
 because of its ease of implementation and resistant against churn.
 %
-In recent years, demand for live streaming services has been increasing. 
-On the other hand, 
-the distribution platform is highly dependent on the enterprise, 
-and the service user's position is weak.
+In recent years, demand for live streaming services has been increasing.
+On the other hand,
+the dependence of distribution platforms on business operators is strong, 
+and the position of service users is weak.
 %
 In this paper, we implement and evaluate the underlying system 
 of a live streaming service based on Kademlia.
