@@ -1088,6 +1088,14 @@ KademliaとLayeredKadの実験結果を表\ref{table:calc-result}と
 		0.636           &   
 		2.098\\
 		\hline
+		2               &   
+		0.636           &   
+		2.098\\
+		\hline
+		3               &   
+		0.636           &   
+		2.098\\
+		\hline
 		4               &   
 		2.032           &   
 		2.728\\
@@ -1100,6 +1108,22 @@ KademliaとLayeredKadの実験結果を表\ref{table:calc-result}と
 		7.679(2.679)    &   
 		2.581\\
 		\hline
+		7               &   
+		13.334(8.334)    &   
+		2.581\\
+		\hline
+		8               &   
+		12.679(7.619)    &   
+		2.581\\
+		\hline
+		9               &   
+		14.313(9.313)    &   
+		2.581\\
+		\hline
+		10               &   
+		13.586(8.586)    &   
+		3.635\\
+		\hline
 	\end{tabular}
 \end{table}
 
@@ -1110,15 +1134,15 @@ KademliaとLayeredKadの実験結果を表\ref{table:calc-result}と
 	\label{fig:calc_compare.png}
 \end{figure}
 
-表\ref{table:calc-result}のチャンク数6でのKademliaの結果を
-"7.679(2.679)"としているのは, Kademliaがこのベンチマークで
+表\ref{table:calc-result}のチャンク数6以降でのKademliaの結果を
+"7.679(2.679)"のようにしているのは, Kademliaがこのベンチマークで
 タイムアウトを引き起こしていたので, タイムアウトの時間5秒を
 引いた値を参考値として括弧の中に表記している.
 また, 図\ref{fig:calc_compare.png}のグラフの値は括弧中のものを
 使用している.
 
 図\ref{fig:calc_compare.png}のグラフより
-Kademliaはチャンク数の増加に比例して, タスク処理時間が増大していて
+Kademliaはチャンク数の増加に比例して, タスク処理時間が増大しているが
 LayeredKadはチャンク数の増加が, タスク処理時間にあまり影響していない
 ことがわかる.
 
