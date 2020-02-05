@@ -672,6 +672,7 @@ LayeredKadのシステムを実現するためのノードの実装である.
 一つのノードは同時に複数のActorになりうる.
 
 \subsection{User}
+Userはデータの探索を行うActorである.
 UserはメタデータのURLをもとにMainNet上でメタデータを探索し, 
 メタデータを持つNavigatorを仲介してSubNetと接続する.
 SubNetと接続しているUserを特にObserveUserと呼ぶ.
@@ -715,7 +716,7 @@ FindStaticMetaTargetやFindStreamMetaTargetを行うことによって
 メタデータの実体データを探索し入手することができる.
 
 \subsection{Seeder}
-Seederとはデータの配信を行うノードである.
+Seederとはデータの配信を行うActorである.
 実際のユースケースでいうところのデータのアップロード者などにあたる.
 Seederは任意のデータをもとにメタデータを作成し, 
 メタデータをMainNet上にStoreし, SubNetを生成する.
